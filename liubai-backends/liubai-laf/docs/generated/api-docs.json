@@ -1,0 +1,5182 @@
+{
+  "info": {
+    "title": "六白云函数接口文档",
+    "version": "1.0.0",
+    "description": "基于 Laf 云函数的后端接口文档"
+  },
+  "endpoints": [
+    {
+      "name": "ai-entrance",
+      "description": "Function Name: ai-entrance",
+      "method": "POST",
+      "path": "/ai-entrance",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据对象",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "响应消息",
+                        "example": "操作成功"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "操作成功"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "AI功能"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Success"
+            }
+          },
+          "error": {
+            "code": "E4000",
+            "errMsg": "Bad Request"
+          }
+        }
+      }
+    },
+    {
+      "name": "ai-prompt",
+      "description": "Function Name: ai-prompt",
+      "method": "POST",
+      "path": "/ai-prompt",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "AI功能"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Success"
+            }
+          },
+          "error": {
+            "code": "E4000",
+            "errMsg": "Bad Request"
+          }
+        }
+      }
+    },
+    {
+      "name": "ai-shared",
+      "description": "Function Name: ai-shared",
+      "method": "POST",
+      "path": "/ai-shared",
+      "parameters": [
+        {
+          "name": "batch_size",
+          "type": "string",
+          "required": true,
+          "description": "batch_size parameter",
+          "in": "body"
+        },
+        {
+          "name": "guidance_scale",
+          "type": "string",
+          "required": true,
+          "description": "guidance_scale parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "AI功能"
+      ],
+      "examples": {
+        "request": {
+          "batch_size": 10,
+          "guidance_scale": "example-id-123"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4000",
+            "errMsg": "客户端请求参数错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "ai-system-two",
+      "description": "Function Name: ai-system-two / author: yexianbei",
+      "method": "POST",
+      "path": "/ai-system-two",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "AI功能"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "clientError": {
+            "code": "E4000",
+            "errMsg": "客户端请求参数错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "clock-half-hr",
+      "description": "定时系统: 每 30 分钟执行一次 1. clear bind-wecom credentials in db 2. clear login state in db 3. clear login state in memory 4. clear token user in memory 5. clear expired orders in db 6. check security like upd...",
+      "method": "POST",
+      "path": "/clock-half-hr",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "定时任务"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Success"
+            }
+          },
+          "error": {
+            "code": "E4000",
+            "errMsg": "Bad Request"
+          }
+        }
+      }
+    },
+    {
+      "name": "clock-one-hr",
+      "description": "定时系统: 每 60 分钟执行一次 清理过期的 Credential",
+      "method": "POST",
+      "path": "/clock-one-hr",
+      "parameters": [
+        {
+          "name": "touser",
+          "type": "string",
+          "required": true,
+          "description": "touser parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "定时任务"
+      ],
+      "examples": {
+        "request": {
+          "touser": "example value"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4000",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.096Z"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "clock-per-min",
+      "description": "定时系统: 每分钟执行一次 发送提醒",
+      "method": "POST",
+      "path": "/clock-per-min",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "定时任务"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.098Z"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "common-config",
+      "description": "put some configs here",
+      "method": "POST",
+      "path": "/common-config",
+      "parameters": [],
+      "requestHeaders": [],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Success"
+            }
+          },
+          "error": {
+            "code": "E4000",
+            "errMsg": "Bad Request"
+          }
+        }
+      }
+    },
+    {
+      "name": "common-i18n",
+      "description": "Function Name: common-i18n",
+      "method": "POST",
+      "path": "/common-i18n",
+      "parameters": [],
+      "requestHeaders": [],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Success"
+            }
+          },
+          "error": {
+            "code": "E4000",
+            "errMsg": "Bad Request"
+          }
+        }
+      }
+    },
+    {
+      "name": "common-ids",
+      "description": "专门创建 id 们的工具函数",
+      "method": "POST",
+      "path": "/common-ids",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "登录成功响应数据",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "description": "用户邮箱",
+                        "example": "user@example.com"
+                      },
+                      "open_id": {
+                        "type": "string",
+                        "description": "用户开放ID",
+                        "example": "openid_123456"
+                      },
+                      "github_id": {
+                        "type": "number",
+                        "description": "GitHub用户ID",
+                        "example": 12345678
+                      },
+                      "theme": {
+                        "type": "string",
+                        "description": "用户主题设置",
+                        "example": "light"
+                      },
+                      "language": {
+                        "type": "string",
+                        "description": "用户语言设置",
+                        "example": "zh-CN"
+                      },
+                      "spaceMemberList": {
+                        "type": "array",
+                        "description": "用户所属空间和成员信息列表",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "spaceId": {
+                              "type": "string",
+                              "example": "space_123"
+                            },
+                            "memberId": {
+                              "type": "string",
+                              "example": "member_456"
+                            },
+                            "memberName": {
+                              "type": "string",
+                              "example": "用户昵称"
+                            }
+                          }
+                        }
+                      },
+                      "subscription": {
+                        "type": "object",
+                        "description": "用户订阅信息",
+                        "properties": {
+                          "level": {
+                            "type": "string",
+                            "example": "premium"
+                          },
+                          "expiredStamp": {
+                            "type": "number",
+                            "example": 1735689600000
+                          }
+                        }
+                      },
+                      "serial_id": {
+                        "type": "string",
+                        "description": "会话序列ID",
+                        "example": "serial_789"
+                      },
+                      "token": {
+                        "type": "string",
+                        "description": "访问令牌",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                      },
+                      "userId": {
+                        "type": "string",
+                        "description": "用户ID",
+                        "example": "user_123456"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "email": "user@example.com",
+                  "open_id": "openid_123456",
+                  "github_id": 12345678,
+                  "theme": "light",
+                  "language": "zh-CN",
+                  "spaceMemberList": [
+                    {}
+                  ],
+                  "subscription": {},
+                  "serial_id": "serial_789",
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "userId": "user_123456"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Success"
+            }
+          },
+          "error": {
+            "code": "E4000",
+            "errMsg": "Bad Request"
+          }
+        }
+      }
+    },
+    {
+      "name": "common-time",
+      "description": "关于时间的工具函数",
+      "method": "POST",
+      "path": "/common-time",
+      "parameters": [],
+      "requestHeaders": [],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Success"
+            }
+          },
+          "error": {
+            "code": "E4000",
+            "errMsg": "Bad Request"
+          }
+        }
+      }
+    },
+    {
+      "name": "common-types",
+      "description": "全局类型 Table_ 开头，表示为数据表结构（文档型数据库） Vector_ 开头，表示为向量数据库结构",
+      "method": "POST",
+      "path": "/common-types",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "登录成功响应数据",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "description": "用户邮箱",
+                        "example": "user@example.com"
+                      },
+                      "open_id": {
+                        "type": "string",
+                        "description": "用户开放ID",
+                        "example": "openid_123456"
+                      },
+                      "github_id": {
+                        "type": "number",
+                        "description": "GitHub用户ID",
+                        "example": 12345678
+                      },
+                      "theme": {
+                        "type": "string",
+                        "description": "用户主题设置",
+                        "example": "light"
+                      },
+                      "language": {
+                        "type": "string",
+                        "description": "用户语言设置",
+                        "example": "zh-CN"
+                      },
+                      "spaceMemberList": {
+                        "type": "array",
+                        "description": "用户所属空间和成员信息列表",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "spaceId": {
+                              "type": "string",
+                              "example": "space_123"
+                            },
+                            "memberId": {
+                              "type": "string",
+                              "example": "member_456"
+                            },
+                            "memberName": {
+                              "type": "string",
+                              "example": "用户昵称"
+                            }
+                          }
+                        }
+                      },
+                      "subscription": {
+                        "type": "object",
+                        "description": "用户订阅信息",
+                        "properties": {
+                          "level": {
+                            "type": "string",
+                            "example": "premium"
+                          },
+                          "expiredStamp": {
+                            "type": "number",
+                            "example": 1735689600000
+                          }
+                        }
+                      },
+                      "serial_id": {
+                        "type": "string",
+                        "description": "会话序列ID",
+                        "example": "serial_789"
+                      },
+                      "token": {
+                        "type": "string",
+                        "description": "访问令牌",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                      },
+                      "userId": {
+                        "type": "string",
+                        "description": "用户ID",
+                        "example": "user_123456"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "email": "user@example.com",
+                  "open_id": "openid_123456",
+                  "github_id": 12345678,
+                  "theme": "light",
+                  "language": "zh-CN",
+                  "spaceMemberList": [
+                    {}
+                  ],
+                  "subscription": {},
+                  "serial_id": "serial_789",
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "userId": "user_123456"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Success"
+            }
+          },
+          "error": {
+            "code": "E4000",
+            "errMsg": "Bad Request"
+          }
+        }
+      }
+    },
+    {
+      "name": "common-util",
+      "description": "存放一些公共函数",
+      "method": "POST",
+      "path": "/common-util",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "登录成功响应数据",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "description": "用户邮箱",
+                        "example": "user@example.com"
+                      },
+                      "open_id": {
+                        "type": "string",
+                        "description": "用户开放ID",
+                        "example": "openid_123456"
+                      },
+                      "github_id": {
+                        "type": "number",
+                        "description": "GitHub用户ID",
+                        "example": 12345678
+                      },
+                      "theme": {
+                        "type": "string",
+                        "description": "用户主题设置",
+                        "example": "light"
+                      },
+                      "language": {
+                        "type": "string",
+                        "description": "用户语言设置",
+                        "example": "zh-CN"
+                      },
+                      "spaceMemberList": {
+                        "type": "array",
+                        "description": "用户所属空间和成员信息列表",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "spaceId": {
+                              "type": "string",
+                              "example": "space_123"
+                            },
+                            "memberId": {
+                              "type": "string",
+                              "example": "member_456"
+                            },
+                            "memberName": {
+                              "type": "string",
+                              "example": "用户昵称"
+                            }
+                          }
+                        }
+                      },
+                      "subscription": {
+                        "type": "object",
+                        "description": "用户订阅信息",
+                        "properties": {
+                          "level": {
+                            "type": "string",
+                            "example": "premium"
+                          },
+                          "expiredStamp": {
+                            "type": "number",
+                            "example": 1735689600000
+                          }
+                        }
+                      },
+                      "serial_id": {
+                        "type": "string",
+                        "description": "会话序列ID",
+                        "example": "serial_789"
+                      },
+                      "token": {
+                        "type": "string",
+                        "description": "访问令牌",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                      },
+                      "userId": {
+                        "type": "string",
+                        "description": "用户ID",
+                        "example": "user_123456"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "email": "user@example.com",
+                  "open_id": "openid_123456",
+                  "github_id": 12345678,
+                  "theme": "light",
+                  "language": "zh-CN",
+                  "spaceMemberList": [
+                    {}
+                  ],
+                  "subscription": {},
+                  "serial_id": "serial_789",
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "userId": "user_123456"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "serverError": {
+            "code": "E5003",
+            "errMsg": "服务器内部错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.170Z"
+            }
+          },
+          "clientError": {
+            "code": "E4009",
+            "errMsg": "客户端请求参数错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "file-set",
+      "description": "文件系统 这里会使用到第三方依赖 qiniu 进行七牛云到凭证管理",
+      "method": "POST",
+      "path": "/file-set",
+      "parameters": [
+        {
+          "name": "operateType",
+          "type": "string",
+          "required": true,
+          "description": "operateType parameter",
+          "in": "body"
+        },
+        {
+          "name": "purpose",
+          "type": "string",
+          "required": true,
+          "description": "purpose parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "文件管理"
+      ],
+      "examples": {
+        "request": {
+          "operateType": "example value",
+          "purpose": "example value"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4000",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.171Z"
+            }
+          },
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "file-utils",
+      "description": "Function Name: file-utils",
+      "method": "POST",
+      "path": "/file-utils",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "文件管理"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          },
+          "clientError": {
+            "code": "E4000",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.184Z"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "happy-system",
+      "description": "Function Name: happy-system",
+      "method": "POST",
+      "path": "/happy-system",
+      "parameters": [
+        {
+          "name": "operateType",
+          "type": "string",
+          "required": true,
+          "description": "operateType parameter",
+          "in": "body"
+        },
+        {
+          "name": "credential",
+          "type": "string",
+          "required": true,
+          "description": "2. get credential",
+          "in": "body"
+        },
+        {
+          "name": "room",
+          "type": "string",
+          "required": true,
+          "description": "2. get room",
+          "in": "body"
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "required": true,
+          "description": "4. search keywords",
+          "in": "body"
+        },
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": true,
+          "description": "couponId parameter",
+          "in": "body"
+        },
+        {
+          "name": "availableDays",
+          "type": "string",
+          "required": true,
+          "description": "1. check out availableDays",
+          "in": "body"
+        },
+        {
+          "name": "image_url",
+          "type": "string",
+          "required": true,
+          "description": "1.2 copytext & image_url",
+          "in": "body"
+        },
+        {
+          "name": "image_h2w",
+          "type": "string",
+          "required": true,
+          "description": "1.3 image_h2w",
+          "in": "body"
+        },
+        {
+          "name": "copytext",
+          "type": "string",
+          "required": true,
+          "description": "3. search copytext",
+          "in": "body"
+        },
+        {
+          "name": "mode",
+          "type": "string",
+          "required": true,
+          "description": "mode parameter",
+          "in": "body"
+        },
+        {
+          "name": "texts",
+          "type": "string",
+          "required": true,
+          "description": "texts parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "根据接口定义的响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {
+          "operateType": "example value",
+          "credential": "example value",
+          "room": "example value",
+          "key": "example value",
+          "couponId": "example-id-123",
+          "availableDays": "example value",
+          "image_url": "https://example.com",
+          "image_h2w": "example value",
+          "copytext": "example value",
+          "mode": "example value",
+          "texts": "example value"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4014",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.202Z"
+            }
+          },
+          "serverError": {
+            "code": "E5004",
+            "errMsg": "服务器内部错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "hello-world",
+      "description": "Function Name: hello-world",
+      "method": "POST",
+      "path": "/hello-world",
+      "parameters": [],
+      "requestHeaders": [],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Success"
+            }
+          },
+          "error": {
+            "code": "E4000",
+            "errMsg": "Bad Request"
+          }
+        }
+      }
+    },
+    {
+      "name": "kf-manage",
+      "description": "微信公众号客服管理 微信客服接口",
+      "method": "POST",
+      "path": "/kf-manage",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5000",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "clientError": {
+            "code": "E4004",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.204Z"
+            }
+          },
+          "serverError": {
+            "code": "E5000",
+            "errMsg": "服务器内部错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "menu-manage",
+      "description": "WeChat Official Account Menu Management - Simplified Version 微信公众号自定义菜单管理 - 简化版本 微信公众号菜单配置 📝 修改说明： 1. 主页链接：修改 HOMEPAGE_URL 2. 菜单名称：修改 name 字段 3. 菜单功能：修改 type、url、key 字段 4. 环境变量：{LIU_CUSTOMER_SERVICE}...",
+      "method": "POST",
+      "path": "/menu-manage",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5000",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "clientError": {
+            "code": "E4000",
+            "errMsg": "客户端请求参数错误"
+          },
+          "serverError": {
+            "code": "E5000",
+            "errMsg": "服务器内部错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.205Z"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "open-connect",
+      "description": "Function Name: open-connect",
+      "method": "POST",
+      "path": "/open-connect",
+      "parameters": [
+        {
+          "name": "operateType",
+          "type": "string",
+          "required": true,
+          "description": "operateType parameter",
+          "in": "body"
+        },
+        {
+          "name": "credential",
+          "type": "string",
+          "required": true,
+          "description": "1. get credential",
+          "in": "body"
+        },
+        {
+          "name": "memberId",
+          "type": "string",
+          "required": true,
+          "description": "1. checking out memberId",
+          "in": "body"
+        },
+        {
+          "name": "ww_qynb_toggle",
+          "type": "string",
+          "required": true,
+          "description": "ww_qynb_toggle parameter",
+          "in": "body"
+        },
+        {
+          "name": "wx_gzh_toggle",
+          "type": "string",
+          "required": true,
+          "description": "wx_gzh_toggle parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据对象",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "响应消息",
+                        "example": "操作成功"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "操作成功"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {
+          "operateType": "example value",
+          "credential": "example value",
+          "memberId": "example-id-123",
+          "ww_qynb_toggle": "example value",
+          "wx_gzh_toggle": "example value"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          },
+          "serverError": {
+            "code": "E5004",
+            "errMsg": "服务器内部错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.208Z"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "payment-order",
+      "description": "Function Name: payment-order",
+      "method": "POST",
+      "path": "/payment-order",
+      "parameters": [
+        {
+          "name": "operateType",
+          "type": "string",
+          "required": true,
+          "description": "operateType parameter",
+          "in": "body"
+        },
+        {
+          "name": "order_id",
+          "type": "string",
+          "required": true,
+          "description": "order_id parameter",
+          "in": "body"
+        },
+        {
+          "name": "x_liu_timezone",
+          "type": "string",
+          "required": true,
+          "description": "x_liu_timezone parameter",
+          "in": "body"
+        },
+        {
+          "name": "wx_mini_openid",
+          "type": "string",
+          "required": true,
+          "description": "wx_mini_openid parameter",
+          "in": "body"
+        },
+        {
+          "name": "wx_gzh_openid",
+          "type": "string",
+          "required": true,
+          "description": "wx_gzh_openid parameter",
+          "in": "body"
+        },
+        {
+          "name": "subscription_id",
+          "type": "string",
+          "required": true,
+          "description": "subscription_id parameter",
+          "in": "body"
+        },
+        {
+          "name": "attach",
+          "type": "string",
+          "required": true,
+          "description": "attach parameter",
+          "in": "body"
+        },
+        {
+          "name": "time_expire",
+          "type": "string",
+          "required": true,
+          "description": "8. get time_expire",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据对象",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "响应消息",
+                        "example": "操作成功"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "操作成功"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "支付"
+      ],
+      "examples": {
+        "request": {
+          "operateType": "example value",
+          "order_id": "example-id-123",
+          "x_liu_timezone": "example value",
+          "wx_mini_openid": "example-id-123",
+          "wx_gzh_openid": "example-id-123",
+          "subscription_id": "example-id-123",
+          "attach": "example value",
+          "time_expire": "example value"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.218Z"
+            }
+          },
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "people-tasks",
+      "description": "Function Name: people-tasks",
+      "method": "POST",
+      "path": "/people-tasks",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "2. decide which path to go",
+          "in": "body"
+        },
+        {
+          "name": "note",
+          "type": "string",
+          "required": true,
+          "description": "note parameter",
+          "in": "body"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "title parameter",
+          "in": "body"
+        },
+        {
+          "name": "listType",
+          "type": "string",
+          "required": true,
+          "description": "listType parameter",
+          "in": "body"
+        },
+        {
+          "name": "skip",
+          "type": "string",
+          "required": true,
+          "description": "skip parameter",
+          "in": "body"
+        },
+        {
+          "name": "chatInfo",
+          "type": "string",
+          "required": true,
+          "description": "3. check my auth if no chatInfo",
+          "in": "body"
+        },
+        {
+          "name": "desc",
+          "type": "string",
+          "required": true,
+          "description": "desc parameter",
+          "in": "body"
+        },
+        {
+          "name": "assignees",
+          "type": "string",
+          "required": true,
+          "description": "assignees parameter",
+          "in": "body"
+        },
+        {
+          "name": "wxData",
+          "type": "string",
+          "required": true,
+          "description": "1. check out wxData",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {
+          "id": "example-id-123",
+          "note": "example value",
+          "title": "example value",
+          "listType": "example value",
+          "skip": "example value",
+          "chatInfo": "example value",
+          "desc": "example value",
+          "assignees": "example value",
+          "wxData": "example value"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.231Z"
+            }
+          },
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "secret-config",
+      "description": "",
+      "method": "POST",
+      "path": "/secret-config",
+      "parameters": [],
+      "requestHeaders": [],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Success"
+            }
+          },
+          "error": {
+            "code": "E4000",
+            "errMsg": "Bad Request"
+          }
+        }
+      }
+    },
+    {
+      "name": "service-poly",
+      "description": "Function Name: service-poly",
+      "method": "POST",
+      "path": "/service-poly",
+      "parameters": [
+        {
+          "name": "operateType",
+          "type": "string",
+          "required": true,
+          "description": "operateType parameter",
+          "in": "body"
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "required": true,
+          "description": "console.log(\"url: \", url)",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {
+          "operateType": "example value",
+          "url": "https://example.com"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4000",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.232Z"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "service-send",
+      "description": "发送短信、邮件",
+      "method": "POST",
+      "path": "/service-send",
+      "parameters": [
+        {
+          "name": "text",
+          "type": "string",
+          "required": true,
+          "description": "text parameter",
+          "in": "body"
+        },
+        {
+          "name": "markdown",
+          "type": "string",
+          "required": true,
+          "description": "markdown parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "根据接口定义的响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4003"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4003",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {
+          "text": "example value",
+          "markdown": "example value"
+        },
+        "responses": {
+          "serverError": {
+            "code": "E5004",
+            "errMsg": "服务器内部错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.233Z"
+            }
+          },
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "subscribe-plan",
+      "description": "Function Name: subscribe-plan",
+      "method": "POST",
+      "path": "/subscribe-plan",
+      "parameters": [
+        {
+          "name": "operateType",
+          "type": "string",
+          "required": true,
+          "description": "operateType parameter",
+          "in": "body"
+        },
+        {
+          "name": "x_liu_timezone",
+          "type": "string",
+          "required": true,
+          "description": "x_liu_timezone parameter",
+          "in": "body"
+        },
+        {
+          "name": "subscription_id",
+          "type": "string",
+          "required": true,
+          "description": "subscription_id parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据对象",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "响应消息",
+                        "example": "操作成功"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "操作成功"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "通用接口"
+      ],
+      "examples": {
+        "request": {
+          "operateType": "example value",
+          "x_liu_timezone": "example value",
+          "subscription_id": "example-id-123"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4004",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.245Z"
+            }
+          },
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "sync-after",
+      "description": "Function Name: sync-after",
+      "method": "POST",
+      "path": "/sync-after",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "数据同步"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Success"
+            }
+          },
+          "error": {
+            "code": "E4000",
+            "errMsg": "Bad Request"
+          }
+        }
+      }
+    },
+    {
+      "name": "sync-get",
+      "description": "Function Name: sync-get / author: LiuDownloadAuthor = {",
+      "method": "POST",
+      "path": "/sync-get",
+      "parameters": [
+        {
+          "name": "atoms",
+          "type": "string",
+          "required": true,
+          "description": "atoms parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据对象",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "响应消息",
+                        "example": "操作成功"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "操作成功"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "数据同步"
+      ],
+      "examples": {
+        "request": {
+          "atoms": "example value"
+        },
+        "responses": {
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.273Z"
+            }
+          },
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "sync-operate",
+      "description": "Function Name: sync-operate",
+      "method": "POST",
+      "path": "/sync-operate",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "数据同步"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.281Z"
+            }
+          },
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "sync-set",
+      "description": "Function Name: sync-set",
+      "method": "POST",
+      "path": "/sync-set",
+      "parameters": [
+        {
+          "name": "operateType",
+          "type": "string",
+          "required": true,
+          "description": "operateType parameter",
+          "in": "body"
+        },
+        {
+          "name": "atoms",
+          "type": "string",
+          "required": true,
+          "description": "atoms parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据对象",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "响应消息",
+                        "example": "操作成功"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "操作成功"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "数据同步"
+      ],
+      "examples": {
+        "request": {
+          "operateType": "example value",
+          "atoms": "example value"
+        },
+        "responses": {
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.304Z"
+            }
+          },
+          "clientError": {
+            "code": "E4004",
+            "errMsg": "客户端请求参数错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "user-login",
+      "description": "用户登录、注册、进入",
+      "method": "POST",
+      "path": "/user-login",
+      "parameters": [
+        {
+          "name": "operateType",
+          "type": "string",
+          "required": true,
+          "description": "operateType parameter",
+          "in": "body"
+        },
+        {
+          "name": "enc_phone",
+          "type": "string",
+          "required": true,
+          "description": "enc_phone parameter",
+          "in": "body"
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "required": true,
+          "description": "3. check out state",
+          "in": "body"
+        },
+        {
+          "name": "phone_code",
+          "type": "string",
+          "required": true,
+          "description": "3. get phone_code",
+          "in": "body"
+        },
+        {
+          "name": "enc_client_key",
+          "type": "string",
+          "required": true,
+          "description": "enc_client_key parameter",
+          "in": "body"
+        },
+        {
+          "name": "credential",
+          "type": "string",
+          "required": true,
+          "description": "6. add a credential",
+          "in": "body"
+        },
+        {
+          "name": "credential_2",
+          "type": "string",
+          "required": true,
+          "description": "4. check if credential_2 is matched",
+          "in": "body"
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "required": true,
+          "description": "GitHub 使用 code 去换 accessToken",
+          "in": "body"
+        },
+        {
+          "name": "redirect_uri",
+          "type": "string",
+          "required": true,
+          "description": "2. check out redirect_uri",
+          "in": "body"
+        },
+        {
+          "name": "x_liu_ide_type",
+          "type": "string",
+          "required": true,
+          "description": "x_liu_ide_type parameter",
+          "in": "body"
+        },
+        {
+          "name": "userId",
+          "type": "string",
+          "required": true,
+          "description": "7. login with userId",
+          "in": "body"
+        },
+        {
+          "name": "multi_credential",
+          "type": "string",
+          "required": true,
+          "description": "multi_credential parameter",
+          "in": "body"
+        },
+        {
+          "name": "multi_credential_id",
+          "type": "string",
+          "required": true,
+          "description": "multi_credential_id parameter",
+          "in": "body"
+        },
+        {
+          "name": "google_id_token",
+          "type": "string",
+          "required": true,
+          "description": "1. to check google_id_token",
+          "in": "body"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "required": true,
+          "description": "to check email",
+          "in": "body"
+        },
+        {
+          "name": "enc_email",
+          "type": "string",
+          "required": true,
+          "description": "0. 解密 enc_email",
+          "in": "body"
+        },
+        {
+          "name": "email_code",
+          "type": "string",
+          "required": true,
+          "description": "to check email_code",
+          "in": "body"
+        },
+        {
+          "name": "oauth_redirect_uri",
+          "type": "string",
+          "required": true,
+          "description": "oauth_redirect_uri parameter",
+          "in": "body"
+        },
+        {
+          "name": "js_code",
+          "type": "string",
+          "required": true,
+          "description": "js_code parameter",
+          "in": "body"
+        },
+        {
+          "name": "oauth_code",
+          "type": "string",
+          "required": true,
+          "description": "1. check out oauth_code",
+          "in": "body"
+        },
+        {
+          "name": "theme",
+          "type": "string",
+          "required": true,
+          "description": "检查 是否要用当前用户本地传来的 theme 或 language",
+          "in": "body"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "required": true,
+          "description": "检查 是否要用当前用户本地传来的 theme 或 language",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "登录成功响应数据",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "description": "用户邮箱",
+                        "example": "user@example.com"
+                      },
+                      "open_id": {
+                        "type": "string",
+                        "description": "用户开放ID",
+                        "example": "openid_123456"
+                      },
+                      "github_id": {
+                        "type": "number",
+                        "description": "GitHub用户ID",
+                        "example": 12345678
+                      },
+                      "theme": {
+                        "type": "string",
+                        "description": "用户主题设置",
+                        "example": "light"
+                      },
+                      "language": {
+                        "type": "string",
+                        "description": "用户语言设置",
+                        "example": "zh-CN"
+                      },
+                      "spaceMemberList": {
+                        "type": "array",
+                        "description": "用户所属空间和成员信息列表",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "spaceId": {
+                              "type": "string",
+                              "example": "space_123"
+                            },
+                            "memberId": {
+                              "type": "string",
+                              "example": "member_456"
+                            },
+                            "memberName": {
+                              "type": "string",
+                              "example": "用户昵称"
+                            }
+                          }
+                        }
+                      },
+                      "subscription": {
+                        "type": "object",
+                        "description": "用户订阅信息",
+                        "properties": {
+                          "level": {
+                            "type": "string",
+                            "example": "premium"
+                          },
+                          "expiredStamp": {
+                            "type": "number",
+                            "example": 1735689600000
+                          }
+                        }
+                      },
+                      "serial_id": {
+                        "type": "string",
+                        "description": "会话序列ID",
+                        "example": "serial_789"
+                      },
+                      "token": {
+                        "type": "string",
+                        "description": "访问令牌",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                      },
+                      "userId": {
+                        "type": "string",
+                        "description": "用户ID",
+                        "example": "user_123456"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "email": "user@example.com",
+                  "open_id": "openid_123456",
+                  "github_id": 12345678,
+                  "theme": "light",
+                  "language": "zh-CN",
+                  "spaceMemberList": [
+                    {}
+                  ],
+                  "subscription": {},
+                  "serial_id": "serial_789",
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "userId": "user_123456"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5000",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "用户管理"
+      ],
+      "examples": {
+        "request": {
+          "operateType": "example value",
+          "enc_phone": "+86 138 0013 8000",
+          "state": "example value",
+          "phone_code": "+86 138 0013 8000",
+          "enc_client_key": "example value",
+          "credential": "example value",
+          "credential_2": "example value",
+          "code": "123456",
+          "redirect_uri": "example value",
+          "x_liu_ide_type": "example-id-123",
+          "userId": "example-id-123",
+          "multi_credential": "example value",
+          "multi_credential_id": "example-id-123",
+          "google_id_token": "example-id-123",
+          "email": "user@example.com",
+          "enc_email": "user@example.com",
+          "email_code": "user@example.com",
+          "oauth_redirect_uri": "example value",
+          "js_code": "123456",
+          "oauth_code": "123456",
+          "theme": "example value",
+          "language": "example value"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4007",
+            "errMsg": "客户端请求参数错误"
+          },
+          "serverError": {
+            "code": "E5004",
+            "errMsg": "服务器内部错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.330Z"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "user-settings",
+      "description": "Function Name: user-settings",
+      "method": "POST",
+      "path": "/user-settings",
+      "parameters": [
+        {
+          "name": "operateType",
+          "type": "string",
+          "required": true,
+          "description": "operateType parameter",
+          "in": "body"
+        },
+        {
+          "name": "memberId",
+          "type": "string",
+          "required": true,
+          "description": "memberId parameter",
+          "in": "body"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Function Name: user-settings",
+          "in": "body"
+        },
+        {
+          "name": "image",
+          "type": "string",
+          "required": true,
+          "description": "image parameter",
+          "in": "body"
+        },
+        {
+          "name": "voicePreference",
+          "type": "string",
+          "required": true,
+          "description": "voicePreference parameter",
+          "in": "body"
+        },
+        {
+          "name": "serial",
+          "type": "string",
+          "required": true,
+          "description": "2.1 query with serial",
+          "in": "body"
+        },
+        {
+          "name": "credential",
+          "type": "string",
+          "required": true,
+          "description": "1. get credential data",
+          "in": "body"
+        },
+        {
+          "name": "x_liu_timezone",
+          "type": "string",
+          "required": true,
+          "description": "x_liu_timezone parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "登录成功响应数据",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "description": "用户邮箱",
+                        "example": "user@example.com"
+                      },
+                      "open_id": {
+                        "type": "string",
+                        "description": "用户开放ID",
+                        "example": "openid_123456"
+                      },
+                      "github_id": {
+                        "type": "number",
+                        "description": "GitHub用户ID",
+                        "example": 12345678
+                      },
+                      "theme": {
+                        "type": "string",
+                        "description": "用户主题设置",
+                        "example": "light"
+                      },
+                      "language": {
+                        "type": "string",
+                        "description": "用户语言设置",
+                        "example": "zh-CN"
+                      },
+                      "spaceMemberList": {
+                        "type": "array",
+                        "description": "用户所属空间和成员信息列表",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "spaceId": {
+                              "type": "string",
+                              "example": "space_123"
+                            },
+                            "memberId": {
+                              "type": "string",
+                              "example": "member_456"
+                            },
+                            "memberName": {
+                              "type": "string",
+                              "example": "用户昵称"
+                            }
+                          }
+                        }
+                      },
+                      "subscription": {
+                        "type": "object",
+                        "description": "用户订阅信息",
+                        "properties": {
+                          "level": {
+                            "type": "string",
+                            "example": "premium"
+                          },
+                          "expiredStamp": {
+                            "type": "number",
+                            "example": 1735689600000
+                          }
+                        }
+                      },
+                      "serial_id": {
+                        "type": "string",
+                        "description": "会话序列ID",
+                        "example": "serial_789"
+                      },
+                      "token": {
+                        "type": "string",
+                        "description": "访问令牌",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                      },
+                      "userId": {
+                        "type": "string",
+                        "description": "用户ID",
+                        "example": "user_123456"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "email": "user@example.com",
+                  "open_id": "openid_123456",
+                  "github_id": 12345678,
+                  "theme": "light",
+                  "language": "zh-CN",
+                  "spaceMemberList": [
+                    {}
+                  ],
+                  "subscription": {},
+                  "serial_id": "serial_789",
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "userId": "user_123456"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5000",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "用户管理"
+      ],
+      "examples": {
+        "request": {
+          "operateType": "example value",
+          "memberId": "example-id-123",
+          "name": "Example Name",
+          "image": "example value",
+          "voicePreference": "example value",
+          "serial": "example value",
+          "credential": "example value",
+          "x_liu_timezone": "example value"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4006",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.332Z"
+            }
+          },
+          "serverError": {
+            "code": "E5004",
+            "errMsg": "服务器内部错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "webhook-alipay",
+      "description": "Function Name: webhook-alipay",
+      "method": "POST",
+      "path": "/webhook-alipay",
+      "parameters": [
+        {
+          "name": "trade_no",
+          "type": "string",
+          "required": true,
+          "description": "1. extract order_id from out_trade_no",
+          "in": "body"
+        },
+        {
+          "name": "buyer_open_id",
+          "type": "string",
+          "required": true,
+          "description": "buyer_open_id parameter",
+          "in": "body"
+        },
+        {
+          "name": "buyer_logon_id",
+          "type": "string",
+          "required": true,
+          "description": "buyer_logon_id parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [],
+      "responses": {
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4003"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4003",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "Webhook"
+      ],
+      "examples": {
+        "request": {
+          "trade_no": "example value",
+          "buyer_open_id": "example-id-123",
+          "buyer_logon_id": "example-id-123"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "webhook-qiniu",
+      "description": "Function Name: webhook-qiniu",
+      "method": "POST",
+      "path": "/webhook-qiniu",
+      "parameters": [
+        {
+          "name": "customKey",
+          "type": "string",
+          "required": true,
+          "description": "customKey parameter",
+          "in": "body"
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "required": true,
+          "description": "key parameter",
+          "in": "body"
+        },
+        {
+          "name": "endUser",
+          "type": "string",
+          "required": true,
+          "description": "endUser parameter",
+          "in": "body"
+        },
+        {
+          "name": "fsize",
+          "type": "integer",
+          "required": true,
+          "description": "fsize parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "Webhook"
+      ],
+      "examples": {
+        "request": {
+          "customKey": "example value",
+          "key": "example value",
+          "endUser": "example value",
+          "fsize": 10
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          },
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.347Z"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "webhook-stripe",
+      "description": "Function Name: webhook-stripe",
+      "method": "POST",
+      "path": "/webhook-stripe",
+      "parameters": [],
+      "requestHeaders": [],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "根据接口定义的响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "Webhook"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          },
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.349Z"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "webhook-wechat",
+      "description": "Receive messages and events from WeChat subscription servers",
+      "method": "POST",
+      "path": "/webhook-wechat",
+      "parameters": [
+        {
+          "name": "xml",
+          "type": "string",
+          "required": true,
+          "description": "xml parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "登录成功响应数据",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "description": "用户邮箱",
+                        "example": "user@example.com"
+                      },
+                      "open_id": {
+                        "type": "string",
+                        "description": "用户开放ID",
+                        "example": "openid_123456"
+                      },
+                      "github_id": {
+                        "type": "number",
+                        "description": "GitHub用户ID",
+                        "example": 12345678
+                      },
+                      "theme": {
+                        "type": "string",
+                        "description": "用户主题设置",
+                        "example": "light"
+                      },
+                      "language": {
+                        "type": "string",
+                        "description": "用户语言设置",
+                        "example": "zh-CN"
+                      },
+                      "spaceMemberList": {
+                        "type": "array",
+                        "description": "用户所属空间和成员信息列表",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "spaceId": {
+                              "type": "string",
+                              "example": "space_123"
+                            },
+                            "memberId": {
+                              "type": "string",
+                              "example": "member_456"
+                            },
+                            "memberName": {
+                              "type": "string",
+                              "example": "用户昵称"
+                            }
+                          }
+                        }
+                      },
+                      "subscription": {
+                        "type": "object",
+                        "description": "用户订阅信息",
+                        "properties": {
+                          "level": {
+                            "type": "string",
+                            "example": "premium"
+                          },
+                          "expiredStamp": {
+                            "type": "number",
+                            "example": 1735689600000
+                          }
+                        }
+                      },
+                      "serial_id": {
+                        "type": "string",
+                        "description": "会话序列ID",
+                        "example": "serial_789"
+                      },
+                      "token": {
+                        "type": "string",
+                        "description": "访问令牌",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                      },
+                      "userId": {
+                        "type": "string",
+                        "description": "用户ID",
+                        "example": "user_123456"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "email": "user@example.com",
+                  "open_id": "openid_123456",
+                  "github_id": 12345678,
+                  "theme": "light",
+                  "language": "zh-CN",
+                  "spaceMemberList": [
+                    {}
+                  ],
+                  "subscription": {},
+                  "serial_id": "serial_789",
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "userId": "user_123456"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "Webhook"
+      ],
+      "examples": {
+        "request": {
+          "xml": "example value"
+        },
+        "responses": {
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          },
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.351Z"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "webhook-wecom-chat-sync",
+      "description": "Receive messages and events from WeCom",
+      "method": "POST",
+      "path": "/webhook-wecom-chat-sync",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "数据同步",
+        "Webhook"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          },
+          "serverError": {
+            "code": "E5001",
+            "errMsg": "服务器内部错误"
+          }
+        }
+      }
+    },
+    {
+      "name": "webhook-wecom",
+      "description": "Receive messages and events from WeCom",
+      "method": "POST",
+      "path": "/webhook-wecom",
+      "parameters": [],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "Webhook"
+      ],
+      "examples": {
+        "request": {},
+        "responses": {
+          "clientError": {
+            "code": "E4003",
+            "errMsg": "客户端请求参数错误"
+          },
+          "serverError": {
+            "code": "E5002",
+            "errMsg": "服务器内部错误"
+          },
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.353Z"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "webhook-wxpay",
+      "description": "Receive messages and events from Weixin Pay",
+      "method": "POST",
+      "path": "/webhook-wxpay",
+      "parameters": [
+        {
+          "name": "resource",
+          "type": "string",
+          "required": true,
+          "description": "resource parameter",
+          "in": "body"
+        }
+      ],
+      "requestHeaders": [
+        {
+          "name": "Authorization",
+          "type": "string",
+          "required": true,
+          "description": "Bearer token for authentication",
+          "in": "header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "请求成功",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "0000"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "响应数据"
+                  }
+                }
+              },
+              "example": {
+                "code": "0000",
+                "data": {
+                  "message": "Success"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "客户端错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E4000"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E4000",
+                "errMsg": "客户端请求错误"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "服务器错误",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "响应状态码",
+                    "example": "E5001"
+                  },
+                  "errMsg": {
+                    "type": "string",
+                    "description": "错误信息"
+                  }
+                }
+              },
+              "example": {
+                "code": "E5001",
+                "errMsg": "服务器内部错误"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "Webhook"
+      ],
+      "examples": {
+        "request": {
+          "resource": "example value"
+        },
+        "responses": {
+          "success": {
+            "code": "0000",
+            "data": {
+              "message": "Operation completed successfully",
+              "timestamp": "2025-10-21T10:08:04.364Z"
+            }
+          },
+          "clientError": {
+            "code": "E4002",
+            "errMsg": "客户端请求参数错误"
+          },
+          "serverError": {
+            "code": "E5002",
+            "errMsg": "服务器内部错误"
+          }
+        }
+      }
+    }
+  ],
+  "generatedAt": "2025-10-21T10:08:04.364Z"
+}

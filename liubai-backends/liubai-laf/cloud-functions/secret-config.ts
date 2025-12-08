@@ -1,0 +1,71 @@
+export const wxpay_apiclient_serial_no = "4C89C2D1C061C1D989E5E2254FB9C1DDE181CB1F"
+export const wxpay_apiclient_cert = "-----BEGIN CERTIFICATE-----\n" +
+    "MIIEITCCAwmgAwIBAgIUTInC0cBhwdmJ5eIlT7nB3eGByx8wDQYJKoZIhvcNAQEL\n" +
+    "BQAwXjELMAkGA1UEBhMCQ04xEzARBgNVBAoTClRlbnBheS5jb20xHTAbBgNVBAsT\n" +
+    "FFRlbnBheS5jb20gQ0EgQ2VudGVyMRswGQYDVQQDExJUZW5wYXkuY29tIFJvb3Qg\n" +
+    "Q0EwHhcNMjUwODI3MTIzNDAxWhcNMzAwODI2MTIzNDAxWjB7MRMwEQYDVQQDDAox\n" +
+    "NTE0OTY1MDcxMRswGQYDVQQKDBLlvq7kv6HllYbmiLfns7vnu58xJzAlBgNVBAsM\n" +
+    "HuWOpumXqOWFiOWMl+enkeaKgOaciemZkOWFrOWPuDELMAkGA1UEBhMCQ04xETAP\n" +
+    "BgNVBAcMCFNoZW5aaGVuMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA\n" +
+    "0+o6bA3uMllPrMDM+jE8fgAMqmT5a/DY8Zlw4pvxXpLIKHkLmc7W+k24Bdm3PC15\n" +
+    "Mfh2fwrwvm9UrzoqUn+mqTsyxm2k8wFqaljLUoq9XQ6TbhNmMC/XQwA6RGtjfHn+\n" +
+    "r5GQwum94glUz8fliG+HqDyTy+5awY0E++YEKNC1+6/x/3QuKPvvXrydNdwT8/O1\n" +
+    "pDjUsvXpbvj6j0Y4WxEs5gWnbTn7TIXTP/8aa+juIeD1/Zl1WywMwX/6in4ex0I0\n" +
+    "BQgDTqLcijWyIIRvTUuIKlZWf/07J7+F+eWJ+SqqwwJLT5Fx51pwK3FPiybpBSWh\n" +
+    "2KUCPVoxJI+/Txl7vkzXFwIDAQABo4G5MIG2MAkGA1UdEwQCMAAwCwYDVR0PBAQD\n" +
+    "AgP4MIGbBgNVHR8EgZMwgZAwgY2ggYqggYeGgYRodHRwOi8vZXZjYS5pdHJ1cy5j\n" +
+    "b20uY24vcHVibGljL2l0cnVzY3JsP0NBPTFCRDQyMjBFNTBEQkMwNEIwNkFEMzk3\n" +
+    "NTQ5ODQ2QzAxQzNFOEVCRDImc2c9SEFDQzQ3MUI2NTQyMkUxMkIyN0E5RDMzQTg3\n" +
+    "QUQxQ0RGNTkyNkUxNDAzNzEwDQYJKoZIhvcNAQELBQADggEBAJg83ERPSd7DBsgZ\n" +
+    "wADdus19O7vI54hhVNfo0fCduLi+Imlo2EbqsX4poL4STAz/EHTKwGiQ/LotDU0e\n" +
+    "0VrvH8/ClbrSQ173KLWE0lzIFs04nvw60LrNBC2u9necs0nvE9RFyr9xOtJSGWJr\n" +
+    "MuRZaydDvgntHckDyOFL/4TSqbxGpga6a10FxtnxOgMBsPkhcKzZL/LqrW6g5C5r\n" +
+    "BvGg9KWRIbrIrsdoMgBwLnrRLufj2WIPqcqKJHugDEV2lGalblLwjsaZzPdYU/1/\n" +
+    "hazBtqTgElRL67O1cIvq84Q6OcWwWeH+V0RW0LUOGFyUCTvaU6evOr1aBjxhORcz\n" +
+    "xATCgWw=\n" +
+    "-----END CERTIFICATE-----\n"
+export const wxpay_apiclient_key = "-----BEGIN PRIVATE KEY-----\n" +
+    "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDT6jpsDe4yWU+s\n" +
+    "wMz6MTx+AAyqZPlr8NjxmXDim/FeksgoeQuZztb6TbgF2bc8LXkx+HZ/CvC+b1Sv\n" +
+    "OipSf6apOzLGbaTzAWpqWMtSir1dDpNuE2YwL9dDADpEa2N8ef6vkZDC6b3iCVTP\n" +
+    "x+WIb4eoPJPL7lrBjQT75gQo0LX7r/H/dC4o++9evJ013BPz87WkONSy9elu+PqP\n" +
+    "RjhbESzmBadtOftMhdM//xpr6O4h4PX9mXVbLAzBf/qKfh7HQjQFCANOotyKNbIg\n" +
+    "hG9NS4gqVlZ//Tsnv4X55Yn5KqrDAktPkXHnWnArcU+LJukFJaHYpQI9WjEkj79P\n" +
+    "GXu+TNcXAgMBAAECggEAR3RJMroXwR5gQS3Zb9s+PHYjzyiw+XaCkCRe7eoLHwp7\n" +
+    "NzppcPlPf6LJFB/vKvliTjkrK3cy6eN8OIFyV9L3DUUKv+GkptOpYCaEmFZzt3b8\n" +
+    "uzcLU+Atw0fGXd+f8g7ok6aPm0lZX2gqEs2iVbjVkyKp6y95pp24On+6k1CcrDpw\n" +
+    "U5rodlCgGxNu4NCVz/1SAunFxSx/rSs6hFLimayVccSkXWv02aoU1RIfVrh/RryC\n" +
+    "oCSYctWVS6RQbhTcxveJdXqkY0I29WL9WvroiJUCOwEzxFhPKUVH0Dxc0tg3IseF\n" +
+    "Z/oVdFzVSdtybm7I5X9szRnnib2cdJ7BXW2uNE7OwQKBgQDtGxWX+mSv8dCjyByY\n" +
+    "ToxaMNFsUYv4hop1DJdc/w0pNaswyVka1OjI86Ynki6rViNcC8lpb1LFy7X3UT0x\n" +
+    "ZA0PP5eNmW0LejPwATW8L4nt2+BZR/Fef6zNbz2fGqEWWvgrchJB0TRf+4SiZTrA\n" +
+    "Hn7MNnj/HlfA/FVWhWVwxea1EQKBgQDkzUFSoPFlPdi+gXixXpuU0Nle5KqBMDk8\n" +
+    "OwDjsajgMGkJGAvyIHZLh743xSG8a+n6dhLElsUYVC+t+njw9SYUGcCDE+uUOVeF\n" +
+    "849w4WesJZiwKZCDXbePNnqhx1UrpT7s97UcIeRtk1YeE+fbpom0+0YSC+Ggt7/R\n" +
+    "0C27wP0ppwKBgQCqw7bpngymKyJ40sbFaszqp/4sZQ7KDxvo8QiSkZ6I7347xMfH\n" +
+    "6088az5fgYjbHU6aHGMS7HpQukZzuK65w7UkJkigUr+WZIzDbhulTRepl5IcuxO7\n" +
+    "W3i4/EUFMciSsTHLGHzNqj5uYldEHmQRueTYbuL12oSZGSLdDXXhoqZmAQKBgEWU\n" +
+    "Tdss6nwZVMKKaQO3e6TD5na/H0LuQVmZr+mOa4bR8f87+tYFHTRW8XfQUTQVtS/f\n" +
+    "nFGAcCu33lAQLZtJUe0m765s7mVDEuS/bs2rHnXxcP+RhEsOwvWgYaa1EaeWNw6l\n" +
+    "PcRyYh8YgUXgU9AuUw5go6x1RIY1mvXZUy8Xv2VdAoGAW27P7VFqtmzrQTDjQDHi\n" +
+    "r9QyU/f8UgKtTh5abi6Oc7OY2lVVXKe576rI/2xzdwHIZ0RnzOHjcrdTIeC3oYut\n" +
+    "5fFcOkjiRL4lbolMdhUbjuOnIxsoVDZhdF/Hj5aq4gXyDiCxGIB6H/rE/w0ebZnZ\n" +
+    "2UbeoW9LThuuukwvqP5+wH0=\n" +
+    "-----END PRIVATE KEY-----\n"
+
+// 微信支付公钥配置
+export const wxpay_public_key_id = "PUB_KEY_ID_0115149650712025082700212340001200"
+export const wxpay_public_key = "-----BEGIN PUBLIC KEY-----\n" +
+    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnytPxq6O+fhfyUhQOx/K\n" +
+    "0N1Xuva6bTypRWBRHlzpISd0tiL73gsCOjiZ4bsglX4nTjFwPuYVAXQ525A/WNOE\n" +
+    "fBjFgunugaSorUuTrpaJ9YYChQhMYUJ8qkXVijsTi0K7xKrigdrbRAumSj1qklUV\n" +
+    "piHWYP0rVF+B20cjQVejshhs3CYoqn+vmzHoob8njw2m6Cu08g0uHlpaIl1Kr07m\n" +
+    "aXWTZocPvWndvR7ZMSX3+iaply15n1yf57B0KBI/IVNd+jmzmQ+E7rVUAyt+6ZQD\n" +
+    "ghJzZIAlRbYNhqTHhHX8oVUl1TxoxdmTQFZzk6Z440WZ2ZTNGfnd+aCaKfl7ygdD\n" +
+    "1wIDAQAB\n" +
+    "-----END PUBLIC KEY-----\n" // 请替换为实际的公钥内容
+
+export const alipay_cfg = {
+    privateKey: "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCVBY5b6cVTqVsBOAgg+s9t7j/jZoL75V66ULhWxtW2k92+NQJYT+WwzEk4QnXEURZGrlKQtz4IuJNBSD02xCoJJh2TOCItYuZ9FSCB1hFh78/AnUJmROy/JHBg1ZBJ1Y15k8ay27MafAcIgiswmE645gVxYyVJ5X3zSpwpGyDAePSk4IkaU+XmDdXdIGY44/kn5TBXGJddJkKRV3nzvjGQEXggwkVHFSVTYgdACGQto8YwI7dTJ65v8c23/s7EBNkVFOiecwtvHYJRB5a1zfEPr+mMA7WrEk/dGz59M5Df/1OaBL45uvSB6gw1JHJXXRM7HCI3X2P+/LceaU4EjON3AgMBAAECggEAFr48Vca9uOD15J+6jd35XluoIHp6rxr4dBLxrzy1TSIQC4FnlDbNZUgoPI/YDVgawDrGmxN8QjR5NNNjlEIn8DGC/f7pKGgZqSlaRrZ2/K1u1YSqp5UJVLqo8/5kAQC4kL9+6bkiAn6/TAshsE7uZMWmOwHYpQiDSmguoQ9k1jrj5wHLuPfc4DsBVowjoSiqZezMxT8qcwQJiTl0WOFVcc/EqvScS/caq3NXQ6sshAkczdgAe0/b+UVG4cWphPnSn3EJSo8rl84O3Lwarxn6YnPxHWOyM38Xx/I0fkJr4YxuNeUZjtIBBstKYINeC8XlCl4dE/Of5ufL/ColD8vSoQKBgQDI50poVrkzKdSmSxAfOF9FQRT4KZD88V4LOi3XsQE8N8b/MPYHinNMyZgym70dk5+o3YB2Pbh2kG5ADjAQecKHLqZgEiVNqBt1GJv5JmFieCAsyZ6eeAuUhNdr3zeaUF0LQjLaa8rWJriSM9d6thqbgi5TLp7ExfdttMBBX9DQWQKBgQC949U57g0cfawrSDXLf8TAofvQuN6vTUKy+48NPR2LjrnMQU91rCoYxGaBEwGb52yseeEvffSI4KjDsV6n52CVVfulEjRLzdM/Q4D5+mTKEEIyJ5OHvC6GVje7DtWRNMOdAKlPdWQROzEJfrjca0GGgm75hSAlU4turgvqp65YTwKBgQCrYGmfocLv+xH0HPoOt8bFS+Q4YTTWIItppmJuqQZ1uNre24Q0II2Ehj93hFSJg2Fh6jloI/RT55a0u6WSmFsxd8DjGPeLTAjIFYsPuQa/udsweXj+k0bFlaAx28MRttX4AathmSv5DCTMSr7YZblCyIT93jn/fyQ3CEYsPjDhWQKBgDuUh+u0QJLm76Vo89AVF9PlP1CfIOfaEwp7mcfqnCGUt8FZ4KeoTFEXFp57Ky8SrutzFm/DUn28F9fHCE8gbxKMNvf1PUlnnFemQ4qrwQIRleOMvWKCbgqidLwRjHsSFipl8bnHuI0biGhVRYWLdbTRqiZKWeq8SuyAWabX1AFLAoGAc+IHa7qN13b1afabnOfSOditfoOReV8gsojuzqbDbw2erRLH6fZwlKgnX+qwUlvqtM7COvSRpKqcfad8gsalEuAC+MlduXWgUR7yyfFsz/Td9FK0oOpU3bZXvhz4dY4ddl9q996GPR1LF5eK8zYqmcK19tRAFsKuK7Z9Wz22RlQ=",
+    alipayPublicKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxU2gBNDcn45Fi/CopFPCvJSzzc5eLYLKTkmyNjAYmXfY0O8TUnxWyMVN/2SbIJi2pyVyyMUxmR2pWBTbpcS+ak2lUI4+KoS11A9TYDry9lAhjuqMc9UAVar3OcvHXeEh0A6+w5bDX+oIIeVaYzD2nysJAnb3P19K4x+/cUo3oCcPbJcE9spW4d4P/CaUJ2Z4dQKdeVjzX7su/sO4yHOwkoOC5DJnEiHHP/n2JSkGSehVIO+S8FmL63sTRQL9OwZ4YW952BKmgXI6kbLN/Ixx2shCAE8TjQaakazJ1GzoiHApBS74TJTYlYham6HjGeRnI20E77GbuHo7TbPs/xSkrQIDAQAB",
+}
