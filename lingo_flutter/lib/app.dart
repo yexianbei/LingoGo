@@ -1,19 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'core/storage/preferences_service.dart';
+import 'core/i18n/app_localizations.dart';
+import 'data/models/lingo_language.dart';
 import 'presentation/pages/onboarding/onboarding_page.dart';
+import 'presentation/pages/home/home_page.dart';
 
 class LingoApp extends StatelessWidget {
   const LingoApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // TODO: 从用户设置中获取语言，目前默认使用中文
+    const defaultLocale = LingoLanguage.zhCN;
+
     return MaterialApp(
       title: 'LingoGo',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
+      localizationsDelegates: [
+        AppLocalizationsDelegate(defaultLocale),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('zh', 'CN'),
+        Locale('en', 'US'),
+        Locale('ja', 'JP'),
+      ],
+      locale: const Locale('zh', 'CN'),
       home: const SplashScreen(),
       routes: {
         '/onboarding': (context) => const OnboardingPage(),
@@ -174,20 +193,4 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-/// 主页面（临时）
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('LingoGo'),
-      ),
-      body: const Center(
-        child: Text('欢迎使用 LingoGo'),
-      ),
-    );
-  }
-}
 

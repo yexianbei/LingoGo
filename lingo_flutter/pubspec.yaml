@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # 状态管理
   provider: ^6.0.5
@@ -31,6 +33,9 @@ dependencies:
   
   # 权限管理
   permission_handler: ^12.0.1
+  
+  # 文件选择
+  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:
