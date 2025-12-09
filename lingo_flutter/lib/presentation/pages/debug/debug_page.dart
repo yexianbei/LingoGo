@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import '../../../core/utils/log.dart';
 import '../../../core/i18n/app_localizations.dart';
 import '../../../services/audio_extractor_service.dart';
+import '../../../services/whisper_service.dart';
 
 /// 调试页面
 class DebugPage extends StatefulWidget {
@@ -17,7 +18,10 @@ class DebugPage extends StatefulWidget {
 class _DebugPageState extends State<DebugPage> {
   final List<String> _logs = [];
   String? _selectedVideoPath;
+  String? _lastExtractedAudioPath;
   final AudioExtractorService _audioExtractorService = AudioExtractorService();
+  final WhisperService _whisperService = WhisperService();
+  bool _isModelLoaded = false;
 
   void _addLog(String message) {
     setState(() {
@@ -84,6 +88,9 @@ class _DebugPageState extends State<DebugPage> {
       );
 
       if (result != null) {
+        setState(() {
+          _lastExtractedAudioPath = result;
+        });
         _addLog('音频提取成功！');
         _addLog('输出文件路径: $result');
         _addLog('文件大小: ${await File(result).length()} 字节');
@@ -101,6 +108,156 @@ class _DebugPageState extends State<DebugPage> {
       _logs.clear();
     });
     _addLog('日志已清空');
+  }
+
+  Future<void> _transcribeAudio() async {
+    // 首先尝试使用最后提取的音频
+    String? audioPath = _lastExtractedAudioPath;
+    
+    // 如果没有最后提取的音频，尝试从 extracted_audio 目录查找最新的音频文件
+    if (audioPath == null || !await File(audioPath).exists()) {
+      try {
+        final Directory appDocDir = await getApplicationDocumentsDirectory();
+        final String audioDir = '${appDocDir.path}/extracted_audio';
+        final Directory dir = Directory(audioDir);
+        
+        if (await dir.exists()) {
+          final List<FileSystemEntity> files = dir.listSync()
+              .where((entity) => entity is File)
+              .toList();
+          
+          if (files.isNotEmpty) {
+            // 按修改时间排序，获取最新的文件
+            files.sort((a, b) {
+              final aStat = a.statSync();
+              final bStat = b.statSync();
+              return bStat.modified.compareTo(aStat.modified);
+            });
+            audioPath = files.first.path;
+            _addLog('找到最新音频文件: $audioPath');
+          }
+        }
+      } catch (e) {
+        Log.e('DebugPage', '查找音频文件失败', e);
+      }
+    }
+    
+    if (audioPath == null || !await File(audioPath).exists()) {
+      _addLog('未找到可用的音频文件，请先提取音频');
+      return;
+    }
+    
+    try {
+      _addLog('开始转录音频...');
+      _addLog('音频文件路径: $audioPath');
+      
+      // 检查模型是否已加载
+      if (!_isModelLoaded) {
+        _addLog('正在加载 Whisper 模型...');
+        // 尝试从应用资源中加载模型，如果不存在则提示用户
+        final String? modelPath = await _findModelPath();
+        
+        if (modelPath == null) {
+          _addLog('未找到 Whisper 模型文件');
+          _addLog('');
+          _addLog('解决方案 1：在 Xcode 中添加 Resources 文件夹');
+          _addLog('1. 在 Xcode 中打开项目（Runner.xcworkspace）');
+          _addLog('2. 在项目导航器中右键点击 "Runner" 文件夹');
+          _addLog('3. 选择 "Add Files to Runner..."');
+          _addLog('4. 导航到 ios/Runner/Resources 文件夹');
+          _addLog('5. 选择整个 Resources 文件夹');
+          _addLog('6. 确保勾选 "Add to targets: Runner"');
+          _addLog('7. 点击 "Add" 按钮');
+          _addLog('8. 重新编译运行应用');
+          _addLog('');
+          _addLog('解决方案 2：将模型文件复制到文档目录（无需 Xcode 配置）');
+          _addLog('1. 将模型文件（如 ggml-base.bin）复制到：');
+          _addLog('   ~/Documents/models/ 目录');
+          _addLog('2. 或者通过文件共享功能将文件导入应用');
+          _addLog('3. 应用会自动从文档目录查找模型文件');
+          _addLog('');
+          _addLog('请查看 Xcode 控制台的详细日志（搜索 [Whisper]）');
+          return;
+        }
+        
+        _addLog('模型文件路径: $modelPath');
+        final bool loaded = await _whisperService.loadModel(modelPath);
+        
+        if (loaded) {
+          setState(() {
+            _isModelLoaded = true;
+          });
+          _addLog('模型加载成功');
+        } else {
+          _addLog('模型加载失败');
+          return;
+        }
+      }
+      
+      // 执行转录
+      _addLog('正在转录音频，请稍候...');
+      final String? transcription = await _whisperService.transcribeAudio(audioPath);
+      
+      if (transcription != null && transcription.isNotEmpty) {
+        _addLog('转录成功！');
+        _addLog('转录结果: $transcription');
+        Log.i('DebugPage', '转录结果: $transcription');
+      } else {
+        _addLog('转录失败或结果为空');
+      }
+    } catch (e, stackTrace) {
+      _addLog('转录音频时发生错误: $e');
+      Log.e('DebugPage', '转录音频失败', e, stackTrace);
+    }
+  }
+  
+  /// 查找 Whisper 模型文件路径
+  Future<String?> _findModelPath() async {
+    try {
+      // 通过平台通道从 iOS 应用包中查找模型文件
+      final String? modelPath = await _whisperService.getModelPath();
+      
+      // 如果应用包中找不到，尝试从文档目录查找
+      if (modelPath == null) {
+        _addLog('应用包中未找到模型文件，尝试从文档目录查找...');
+        final Directory appDocDir = await getApplicationDocumentsDirectory();
+        final String modelsDir = '${appDocDir.path}/models';
+        final Directory dir = Directory(modelsDir);
+        
+        if (await dir.exists()) {
+          final List<FileSystemEntity> files = dir.listSync()
+              .where((entity) => entity is File && entity.path.endsWith('.bin'))
+              .toList();
+          
+          if (files.isNotEmpty) {
+            // 按文件名优先级排序：base > small > tiny > medium > large
+            files.sort((a, b) {
+              final aName = a.path.toLowerCase();
+              final bName = b.path.toLowerCase();
+              final priority = ['base', 'small', 'tiny', 'medium', 'large'];
+              int aIndex = priority.indexWhere((p) => aName.contains(p));
+              int bIndex = priority.indexWhere((p) => bName.contains(p));
+              aIndex = aIndex == -1 ? 999 : aIndex;
+              bIndex = bIndex == -1 ? 999 : bIndex;
+              return aIndex.compareTo(bIndex);
+            });
+            
+            final foundPath = files.first.path;
+            _addLog('在文档目录找到模型文件: $foundPath');
+            return foundPath;
+          }
+        }
+        
+        _addLog('文档目录中也未找到模型文件');
+        _addLog('提示：可以将模型文件复制到应用的文档目录');
+        _addLog('路径：Documents/models/ggml-base.bin');
+      }
+      
+      return modelPath;
+    } catch (e) {
+      Log.e('DebugPage', '查找模型路径失败', e);
+      return null;
+    }
   }
 
   @override
@@ -129,7 +286,7 @@ class _DebugPageState extends State<DebugPage> {
                 ElevatedButton.icon(
                   onPressed: _pickVideo,
                   icon: const Icon(Icons.video_library),
-                  label: const Text('选择视频文件'),
+                  label: Text(localizations.selectVideo),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
@@ -138,7 +295,16 @@ class _DebugPageState extends State<DebugPage> {
                 ElevatedButton.icon(
                   onPressed: _selectedVideoPath != null ? _extractAudio : null,
                   icon: const Icon(Icons.audiotrack),
-                  label: const Text('提取音频'),
+                  label: Text(localizations.extractAudio),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton.icon(
+                  onPressed: _transcribeAudio,
+                  icon: const Icon(Icons.text_fields),
+                  label: Text(localizations.transcribeAudio),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),

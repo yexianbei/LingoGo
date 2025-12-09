@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04E4DF602EE857DF00FA8ED8 /* jfk.wav in Resources */ = {isa = PBXBuildFile; fileRef = 04E4DF5C2EE857DF00FA8ED8 /* jfk.wav */; };
+		04E4DF612EE857DF00FA8ED8 /* ggml-base.bin in Resources */ = {isa = PBXBuildFile; fileRef = 04E4DF592EE857DF00FA8ED8 /* ggml-base.bin */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		14A807492EE8103000F0F28B /* whisper.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14A807452EE80D4800F0F28B /* whisper.xcframework */; };
 		14A8074E2EE8125100F0F28B /* LibWhisper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A8074D2EE8125100F0F28B /* LibWhisper.swift */; };
@@ -37,6 +39,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		04E4DF592EE857DF00FA8ED8 /* ggml-base.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-base.bin"; sourceTree = "<group>"; };
+		04E4DF5C2EE857DF00FA8ED8 /* jfk.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jfk.wav; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		14A807452EE80D4800F0F28B /* whisper.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = whisper.xcframework; sourceTree = "<group>"; };
@@ -75,6 +79,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04E4DF5A2EE857DF00FA8ED8 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				04E4DF592EE857DF00FA8ED8 /* ggml-base.bin */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		04E4DF5D2EE857DF00FA8ED8 /* samples */ = {
+			isa = PBXGroup;
+			children = (
+				04E4DF5C2EE857DF00FA8ED8 /* jfk.wav */,
+			);
+			path = samples;
+			sourceTree = "<group>";
+		};
+		04E4DF5E2EE857DF00FA8ED8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				04E4DF5A2EE857DF00FA8ED8 /* models */,
+				04E4DF5D2EE857DF00FA8ED8 /* samples */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		2DD99F9BDF5A1742FF6360C5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +137,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				04E4DF5E2EE857DF00FA8ED8 /* Resources */,
 				14A807502EE81F3D00F0F28B /* RiffWaveUtils.swift */,
 				14A8074C2EE8125100F0F28B /* AudioConverter.swift */,
 				14A8074D2EE8125100F0F28B /* LibWhisper.swift */,
@@ -209,6 +239,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
+				04E4DF602EE857DF00FA8ED8 /* jfk.wav in Resources */,
+				04E4DF612EE857DF00FA8ED8 /* ggml-base.bin in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,

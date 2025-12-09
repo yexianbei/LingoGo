@@ -26,6 +26,7 @@ class AppLocalizations {
   String get debugPage => _getText('debug_page');
   String get selectVideo => _getText('select_video');
   String get extractAudio => _getText('extract_audio');
+  String get transcribeAudio => _getText('transcribe_audio');
 
   String _getText(String key) {
     switch (locale) {
@@ -48,6 +49,7 @@ class AppLocalizations {
     'debug_page': '调试页面',
     'select_video': '选择视频文件',
     'extract_audio': '提取音频',
+    'transcribe_audio': '转录音频',
   };
 
   static const Map<String, String> _enUS = {
@@ -60,6 +62,7 @@ class AppLocalizations {
     'debug_page': 'Debug Page',
     'select_video': 'Select Video',
     'extract_audio': 'Extract Audio',
+    'transcribe_audio': 'Transcribe Audio',
   };
 
   static const Map<String, String> _jaJP = {
@@ -72,6 +75,7 @@ class AppLocalizations {
     'debug_page': 'デバッグページ',
     'select_video': '動画を選択',
     'extract_audio': '音声を抽出',
+    'transcribe_audio': '音声を文字起こし',
   };
 }
 
