@@ -1,0 +1,6 @@
+# 大文件 - 不提交到 Git
+lingo_flutter/ios/Runner/Resources/models/ggml-base.bin
+lingo_flutter/ios/Resources/models/ggml-base.bin
+*.bin
+# whisper.xcframework 相关大文件
+lingo_flutter/ios/whisper.xcframework/
