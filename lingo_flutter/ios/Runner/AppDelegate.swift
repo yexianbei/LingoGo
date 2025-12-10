@@ -1,6 +1,8 @@
 import UIKit
 import Flutter
 import Foundation
+import AVKit
+import AVFoundation
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -52,6 +54,11 @@ import Foundation
           }
           
       
+      // 注册 NativeVideoViewFactory
+      let registrar = self.registrar(forPlugin: "NativeVideoView")
+      let factory = NativeVideoViewFactory(messenger: registrar!.messenger())
+      registrar!.register(factory, withId: "lingogo/native_video")
+      
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
   
@@ -97,7 +104,7 @@ import Foundation
       /// 获取 Whisper 模型路径
       private func getWhisperModelPath(result: @escaping FlutterResult) {
         let fileManager = FileManager.default
-        let modelNames = ["ggml-base.bin", "ggml-tiny.bin", "ggml-small.bin", "ggml-medium.bin", "ggml-large.bin"]
+        let modelNames = ["ggml-tiny.bin", "ggml-base.bin", "ggml-small.bin", "ggml-medium.bin", "ggml-large.bin"]
         // 兼容不同的资源组织方式：蓝色文件夹(保留目录) 或 黄色组(扁平复制)
         let bundleSubdirs: [String?] = ["models", "model", nil] // nil 表示 Bundle 根目录
         
@@ -211,13 +218,17 @@ import Foundation
         
         let audioURL = URL(fileURLWithPath: audioPath)
         
-        Task {
+        Task.detached(priority: .userInitiated) {
           do {
             // 将音频文件转换为 Float 数组
             let samples = try AudioConverter.convertToFloatArray(audioURL)
             
             // 执行转录
-            await context.fullTranscribe(samples: samples)
+            await context.transcribeWithProgress(samples: samples, onProgress: { [weak self] progress in
+                DispatchQueue.main.async {
+                    self?.whisperChannel?.invokeMethod("onProgress", arguments: progress)
+                }
+            })
             
             // 获取转录结果
             let transcription = await context.getTranscription()
@@ -233,7 +244,158 @@ import Foundation
                 details: nil
               ))
             }
+
+            }
           }
         }
       }
+
+
+class NativeVideoViewFactory: NSObject, FlutterPlatformViewFactory {
+    private var messenger: FlutterBinaryMessenger
+
+    init(messenger: FlutterBinaryMessenger) {
+        self.messenger = messenger
+        super.init()
+    }
+
+    func create(
+        withFrame frame: CGRect,
+        viewIdentifier viewId: Int64,
+        arguments args: Any?
+    ) -> FlutterPlatformView {
+        return NativeVideoView(
+            frame: frame,
+            viewIdentifier: viewId,
+            arguments: args,
+            binaryMessenger: messenger
+        )
+    }
+    
+    func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
+        return FlutterStandardMessageCodec.sharedInstance()
+    }
+}
+
+class NativeVideoView: NSObject, FlutterPlatformView {
+    private var _view: UIView
+    private var _playerViewController: AVPlayerViewController?
+    private var _channel: FlutterMethodChannel
+    private var _timeObserver: Any?
+    private var _durationObservation: NSKeyValueObservation?
+    private var _rateObservation: NSKeyValueObservation?
+
+    init(
+        frame: CGRect,
+        viewIdentifier viewId: Int64,
+        arguments args: Any?,
+        binaryMessenger messenger: FlutterBinaryMessenger?
+    ) {
+        _view = UIView()
+        _channel = FlutterMethodChannel(name: "lingogo/native_video_\(viewId)", binaryMessenger: messenger!)
+        super.init()
+        
+        _channel.setMethodCallHandler(handle)
+        
+        if let args = args as? [String: Any],
+           let videoPath = args["videoPath"] as? String {
+            setupPlayer(videoPath: videoPath)
+        }
+    }
+    
+    deinit {
+        if let player = _playerViewController?.player {
+            if let observer = _timeObserver {
+                player.removeTimeObserver(observer)
+            }
+        }
+        _durationObservation?.invalidate()
+        _rateObservation?.invalidate()
+    }
+
+    func view() -> UIView {
+        return _view
+    }
+    
+    private func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let player = _playerViewController?.player else {
+            result(FlutterError(code: "NO_PLAYER", message: "Player not initialized", details: nil))
+            return
+        }
+        
+        switch call.method {
+        case "play":
+            player.play()
+            result(nil)
+        case "pause":
+            player.pause()
+            result(nil)
+        case "seekTo":
+            if let args = call.arguments as? [String: Any],
+               let position = args["position"] as? Int {
+                let time = CMTime(value: CMTimeValue(position), timescale: 1000)
+                player.seek(to: time)
+                result(nil)
+            } else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing position", details: nil))
+            }
+        default:
+            result(FlutterMethodNotImplemented)
+        }
+    }
+
+    private func setupPlayer(videoPath: String) {
+        let videoURL = URL(fileURLWithPath: videoPath)
+        let player = AVPlayer(url: videoURL)
+        player.play()
+        let playerViewController = AVPlayerViewController()
+        playerViewController.player = player
+        
+        _playerViewController = playerViewController
+        
+        _view.addSubview(playerViewController.view)
+        playerViewController.view.frame = _view.bounds
+        playerViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        // Add time observer
+        let interval = CMTime(seconds: 0.1, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        _timeObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+            let milliseconds = Int(CMTimeGetSeconds(time) * 1000)
+            self?._channel.invokeMethod("onPositionChanged", arguments: milliseconds)
+        }
+        
+        // Observe rate (isPlaying)
+        _rateObservation = player.observe(\.rate) { [weak self] player, _ in
+            let isPlaying = player.rate != 0
+            self?._channel.invokeMethod("onPlayerStateChanged", arguments: isPlaying)
+        }
+        
+        // Observe duration (via currentItem) - note: duration might be unknown initially
+        if let item = player.currentItem {
+             // We can observe the status to know when duration is available
+             // Or observe duration directly if iOS 13+?
+             // Using KVO on duration is reliable once status is ready.
+             // But simpler: just send duration when status becomes ready?
+             // Or periodically check?
+             // Use KVO on status and then check duration.
+             // Actually, simplest is to retrieve duration when status changes to readyToPlay.
+             // Let's rely on standard notifications or KVO.
+             
+             // For simplicity, let's just observe duration directly on currentItem if possible,
+             // or send it when we start playing.
+             
+            let durationObserver = item.observe(\.duration) { [weak self] item, _ in
+                let seconds = CMTimeGetSeconds(item.duration)
+                if !seconds.isNaN {
+                    let milliseconds = Int(seconds * 1000)
+                    self?._channel.invokeMethod("onDurationChanged", arguments: milliseconds)
+                }
+            }
+             // Keep reference to avoid dealloc
+             // But we need to store it. I used _durationObservation.
+             // Hack: let's store it in a separate property or list if multiple.
+             // Re-using _durationObservation for item duration.
+             _durationObservation = durationObserver
+        }
+    }
 }

@@ -1,11 +1,19 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../core/utils/log.dart';
 import '../../../core/i18n/app_localizations.dart';
 import '../../../services/audio_extractor_service.dart';
+import 'dart:convert';
 import '../../../services/whisper_service.dart';
+import '../../widgets/native_video_view.dart';
+import '../../widgets/lyrics_view.dart';
+import '../../../data/models/subtitle_segment.dart';
+import '../../../data/models/video_record.dart';
+import '../../../services/database_service.dart';
+import '../../widgets/video_controller_panel.dart';
 
 /// 调试页面
 class DebugPage extends StatefulWidget {
@@ -21,9 +29,43 @@ class _DebugPageState extends State<DebugPage> {
   String? _lastExtractedAudioPath;
   final AudioExtractorService _audioExtractorService = AudioExtractorService();
   final WhisperService _whisperService = WhisperService();
+  final DatabaseService _databaseService = DatabaseService();
   bool _isModelLoaded = false;
+  
+  List<SubtitleSegment> _segments = [];
+  int _currentPosition = 0; // Milliseconds
+  int _totalDuration = 0; // Milliseconds
+  bool _isPlaying = false;
+  
+  NativeVideoViewController? _videoController;
+  
+  int _progress = 0;
+  bool _isTranscribing = false;
+  StreamSubscription? _progressSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _progressSubscription = _whisperService.onProgress.listen((progress) {
+      if (mounted) {
+        setState(() {
+          _progress = progress;
+        });
+      }
+    });
+    // 页面加载时自动初始化模型并加载上次视频
+    _initModel();
+    _loadLastVideo();
+  }
+
+  @override
+  void dispose() {
+    _progressSubscription?.cancel();
+    super.dispose();
+  }
 
   void _addLog(String message) {
+    if (!mounted) return;
     setState(() {
       _logs.add('${DateTime.now().toString().substring(11, 19)}: $message');
     });
@@ -41,16 +83,51 @@ class _DebugPageState extends State<DebugPage> {
       if (video != null) {
         setState(() {
           _selectedVideoPath = video.path;
+          _segments = []; // Clear previous
         });
         _addLog('视频选择成功: ${video.path}');
         _addLog('视频名称: ${video.name}');
-        _addLog('视频大小: ${await video.length()} 字节');
+        
+        // Try load video record from DB to check if we have existing transcript
+        final record = await _databaseService.getVideoRecord(video.path);
+        if (record != null && record.transcript.isNotEmpty) {
+           setState(() {
+             _segments = record.transcript;
+             if (record.duration > 0) {
+               _totalDuration = record.duration;
+             }
+           });
+           _addLog('已从数据库加载转录记录');
+        } else {
+           // No record or empty transcript. Auto extract.
+           _extractAudio();
+        }
       } else {
         _addLog('用户取消了视频选择');
       }
     } catch (e, stackTrace) {
       _addLog('选择视频失败: $e');
       Log.e('DebugPage', '选择视频失败', e, stackTrace);
+    }
+  }
+
+  Future<void> _loadLastVideo() async {
+    try {
+      final record = await _databaseService.getLastVideoRecord();
+      if (record != null) {
+        if (await File(record.path).exists()) {
+             setState(() {
+               _selectedVideoPath = record.path;
+               _segments = record.transcript;
+               if (record.duration > 0) {
+                 _totalDuration = record.duration;
+               }
+             });
+             _addLog('已自动加载上次播放的视频: ${record.name}');
+        }
+      }
+    } catch (e) {
+      Log.e('DebugPage', '加载上次视频失败', e);
     }
   }
 
@@ -81,9 +158,9 @@ class _DebugPageState extends State<DebugPage> {
         _selectedVideoPath!,
         outputPath,
         onProgress: (progress) {
-          setState(() {
-            _addLog('提取进度: ${(progress * 100).toStringAsFixed(1)}%');
-          });
+          if (mounted) {
+             _addLog('提取进度: ${(progress * 100).toStringAsFixed(1)}%');
+          }
         },
       );
 
@@ -103,6 +180,57 @@ class _DebugPageState extends State<DebugPage> {
     }
   }
 
+  /// 初始化模型
+  Future<void> _initModel() async {
+    if (_isModelLoaded) return;
+    
+    try {
+      _addLog('正在加载 Whisper 模型...');
+      // 尝试从应用资源中加载模型
+      final String? modelPath = await _findModelPath();
+      
+      if (modelPath == null) {
+        _addLog('未找到 Whisper 模型文件');
+        _addLog('');
+        _addLog('解决方案 1：在 Xcode 中添加 Resources 文件夹');
+        _addLog('1. 在 Xcode 中打开项目（Runner.xcworkspace）');
+        _addLog('2. 在项目导航器中右键点击 "Runner" 文件夹');
+        _addLog('3. 选择 "Add Files to Runner..."');
+        _addLog('4. 导航到 ios/Runner/Resources 文件夹');
+        _addLog('5. 选择整个 Resources 文件夹');
+        _addLog('6. 确保勾选 "Add to targets: Runner"');
+        _addLog('7. 点击 "Add" 按钮');
+        _addLog('8. 重新编译运行应用');
+        _addLog('');
+        _addLog('解决方案 2：将模型文件复制到文档目录（无需 Xcode 配置）');
+        _addLog('1. 将模型文件（如 ggml-base.bin）复制到：');
+        _addLog('   ~/Documents/models/ 目录');
+        _addLog('2. 或者通过文件共享功能将文件导入应用');
+        _addLog('3. 应用会自动从文档目录查找模型文件');
+        _addLog('');
+        _addLog('请查看 Xcode 控制台的详细日志（搜索 [Whisper]）');
+        return;
+      }
+      
+      _addLog('模型文件路径: $modelPath');
+      final bool loaded = await _whisperService.loadModel(modelPath);
+      
+      if (loaded) {
+        if (mounted) {
+          setState(() {
+            _isModelLoaded = true;
+          });
+        }
+        _addLog('模型加载成功');
+      } else {
+        _addLog('模型加载失败');
+      }
+    } catch (e) {
+      _addLog('模型初始化失败: $e');
+      Log.e('DebugPage', '模型初始化失败', e);
+    }
+  }
+
   void _clearLogs() {
     setState(() {
       _logs.clear();
@@ -111,103 +239,117 @@ class _DebugPageState extends State<DebugPage> {
   }
 
   Future<void> _transcribeAudio() async {
-    // 首先尝试使用最后提取的音频
-    String? audioPath = _lastExtractedAudioPath;
-    
-    // 如果没有最后提取的音频，尝试从 extracted_audio 目录查找最新的音频文件
-    if (audioPath == null || !await File(audioPath).exists()) {
-      try {
-        final Directory appDocDir = await getApplicationDocumentsDirectory();
-        final String audioDir = '${appDocDir.path}/extracted_audio';
-        final Directory dir = Directory(audioDir);
-        
-        if (await dir.exists()) {
-          final List<FileSystemEntity> files = dir.listSync()
-              .where((entity) => entity is File)
-              .toList();
-          
-          if (files.isNotEmpty) {
-            // 按修改时间排序，获取最新的文件
-            files.sort((a, b) {
-              final aStat = a.statSync();
-              final bStat = b.statSync();
-              return bStat.modified.compareTo(aStat.modified);
-            });
-            audioPath = files.first.path;
-            _addLog('找到最新音频文件: $audioPath');
-          }
-        }
-      } catch (e) {
-        Log.e('DebugPage', '查找音频文件失败', e);
-      }
-    }
-    
-    if (audioPath == null || !await File(audioPath).exists()) {
-      _addLog('未找到可用的音频文件，请先提取音频');
-      return;
-    }
+    setState(() {
+      _isTranscribing = true;
+      _progress = 0;
+    });
     
     try {
-      _addLog('开始转录音频...');
-      _addLog('音频文件路径: $audioPath');
+      // 首先尝试使用最后提取的音频
+      String? audioPath = _lastExtractedAudioPath;
       
-      // 检查模型是否已加载
-      if (!_isModelLoaded) {
-        _addLog('正在加载 Whisper 模型...');
-        // 尝试从应用资源中加载模型，如果不存在则提示用户
-        final String? modelPath = await _findModelPath();
+      // 如果没有最后提取的音频，尝试从 extracted_audio 目录查找最新的音频文件
+      if (audioPath == null || !await File(audioPath).exists()) {
+        try {
+          final Directory appDocDir = await getApplicationDocumentsDirectory();
+          final String audioDir = '${appDocDir.path}/extracted_audio';
+          final Directory dir = Directory(audioDir);
+          
+          if (await dir.exists()) {
+            final List<FileSystemEntity> files = dir.listSync()
+                .where((entity) => entity is File)
+                .toList();
+            
+            if (files.isNotEmpty) {
+              // 按修改时间排序，获取最新的文件
+              files.sort((a, b) {
+                final aStat = a.statSync();
+                final bStat = b.statSync();
+                return bStat.modified.compareTo(aStat.modified);
+              });
+              audioPath = files.first.path;
+              _addLog('找到最新音频文件: $audioPath');
+            }
+          }
+        } catch (e) {
+          Log.e('DebugPage', '查找音频文件失败', e);
+        }
+      }
+      
+      if (audioPath == null || !await File(audioPath).exists()) {
+        _addLog('未找到可用的音频文件，请先提取音频');
+        return;
+      }
+      
+      try {
+        _addLog('开始转录音频...');
+        _addLog('音频文件路径: $audioPath');
         
-        if (modelPath == null) {
-          _addLog('未找到 Whisper 模型文件');
-          _addLog('');
-          _addLog('解决方案 1：在 Xcode 中添加 Resources 文件夹');
-          _addLog('1. 在 Xcode 中打开项目（Runner.xcworkspace）');
-          _addLog('2. 在项目导航器中右键点击 "Runner" 文件夹');
-          _addLog('3. 选择 "Add Files to Runner..."');
-          _addLog('4. 导航到 ios/Runner/Resources 文件夹');
-          _addLog('5. 选择整个 Resources 文件夹');
-          _addLog('6. 确保勾选 "Add to targets: Runner"');
-          _addLog('7. 点击 "Add" 按钮');
-          _addLog('8. 重新编译运行应用');
-          _addLog('');
-          _addLog('解决方案 2：将模型文件复制到文档目录（无需 Xcode 配置）');
-          _addLog('1. 将模型文件（如 ggml-base.bin）复制到：');
-          _addLog('   ~/Documents/models/ 目录');
-          _addLog('2. 或者通过文件共享功能将文件导入应用');
-          _addLog('3. 应用会自动从文档目录查找模型文件');
-          _addLog('');
-          _addLog('请查看 Xcode 控制台的详细日志（搜索 [Whisper]）');
-          return;
+        // 检查模型是否已加载
+        if (!_isModelLoaded) {
+          _addLog('模型尚未加载，尝试重新加载...');
+          await _initModel();
+          if (!_isModelLoaded) {
+            _addLog('模型加载失败，无法转录');
+            return;
+          }
         }
         
-        _addLog('模型文件路径: $modelPath');
-        final bool loaded = await _whisperService.loadModel(modelPath);
+        // 执行转录
+        _addLog('正在转录音频，请稍候...');
+        final String? transcription = await _whisperService.transcribeAudio(audioPath);
         
-        if (loaded) {
-          setState(() {
-            _isModelLoaded = true;
-          });
-          _addLog('模型加载成功');
+        if (transcription != null && transcription.isNotEmpty) {
+          _addLog('转录成功！');
+          Log.i('DebugPage', 'Raw transcription: $transcription');
+          
+          try {
+             final List<dynamic> jsonList = jsonDecode(transcription);
+             final segments = jsonList.map((e) => SubtitleSegment.fromJson(e)).toList();
+             
+             setState(() {
+               _segments = segments;
+             });
+             
+             // Save to DB
+             if (_selectedVideoPath != null) {
+                 final File videoFile = File(_selectedVideoPath!);
+                 final int fileSize = await videoFile.length();
+                 final String fileName = videoFile.path.split('/').last;
+
+                 final record = VideoRecord(
+                   path: _selectedVideoPath!,
+                   name: fileName,
+                   size: fileSize,
+                   duration: _totalDuration,
+                   transcript: segments,
+                   createdAt: DateTime.now().millisecondsSinceEpoch,
+                 );
+                 
+                 await _databaseService.saveVideoRecord(record);
+                 _addLog('完整视频记录已保存到数据库');
+             }
+
+          } catch (e) {
+             _addLog('解析转录结果失败: $e');
+             // Fallback if not JSON (e.g. error message)
+             Log.e('DebugPage', 'JSON Parse Error', e);
+          }
         } else {
-          _addLog('模型加载失败');
-          return;
+          _addLog('转录失败或结果为空');
         }
+      } catch (e, stackTrace) {
+        _addLog('转录音频时发生错误: $e');
+        Log.e('DebugPage', '转录音频失败', e, stackTrace);
       }
-      
-      // 执行转录
-      _addLog('正在转录音频，请稍候...');
-      final String? transcription = await _whisperService.transcribeAudio(audioPath);
-      
-      if (transcription != null && transcription.isNotEmpty) {
-        _addLog('转录成功！');
-        _addLog('转录结果: $transcription');
-        Log.i('DebugPage', '转录结果: $transcription');
-      } else {
-        _addLog('转录失败或结果为空');
+    } catch (e) {
+      _addLog('未知错误: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isTranscribing = false;
+        });
       }
-    } catch (e, stackTrace) {
-      _addLog('转录音频时发生错误: $e');
-      Log.e('DebugPage', '转录音频失败', e, stackTrace);
     }
   }
   
@@ -230,11 +372,11 @@ class _DebugPageState extends State<DebugPage> {
               .toList();
           
           if (files.isNotEmpty) {
-            // 按文件名优先级排序：base > small > tiny > medium > large
+            // 按文件名优先级排序：tiny > base > small > medium > large
             files.sort((a, b) {
               final aName = a.path.toLowerCase();
               final bName = b.path.toLowerCase();
-              final priority = ['base', 'small', 'tiny', 'medium', 'large'];
+              final priority = ['tiny', 'base', 'small', 'medium', 'large'];
               int aIndex = priority.indexWhere((p) => aName.contains(p));
               int bIndex = priority.indexWhere((p) => bName.contains(p));
               aIndex = aIndex == -1 ? 999 : aIndex;
@@ -260,124 +402,206 @@ class _DebugPageState extends State<DebugPage> {
     }
   }
 
+  void _showSettings() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text('Settings & Debug', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            ListTile(
+              leading: const Icon(Icons.video_library),
+              title: Text(AppLocalizations.of(context).selectVideo),
+              onTap: () {
+                Navigator.pop(context);
+                _pickVideo();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.text_fields),
+              title: Text(_isTranscribing ? 'Transcribing...' : AppLocalizations.of(context).transcribeAudio),
+              subtitle: _isTranscribing ? LinearProgressIndicator(value: _progress / 100) : null,
+              onTap: _isTranscribing ? null : () {
+                Navigator.pop(context);
+                _transcribeAudio();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.list_alt),
+              title: const Text('View Logs'),
+              onTap: () {
+                Navigator.pop(context);
+                _showLogsDialog();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline),
+              title: const Text('Clear Logs'),
+              onTap: () {
+                Navigator.pop(context);
+                _clearLogs();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showLogsDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logs'),
+        content: SizedBox(
+          width: double.maxFinite,
+          height: 400,
+          child: ListView.builder(
+            reverse: true,
+            itemCount: _logs.length,
+            itemBuilder: (context, index) => Text(
+              _logs[_logs.length - 1 - index],
+              style: const TextStyle(fontSize: 10, fontFamily: 'monospace'),
+            ),
+          ),
+        ),
+        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close'))],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
-
     return Scaffold(
+      backgroundColor: Colors.grey[50], // Light background
       appBar: AppBar(
-        title: const Text('调试页面'),
+        title: Text(
+           _selectedVideoPath?.split('/').last ?? 'Player',
+           style: const TextStyle(fontSize: 14, color: Colors.black87),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.clear_all),
-            onPressed: _clearLogs,
-            tooltip: '清空日志',
+            icon: const Icon(Icons.tune, color: Colors.black87),
+            onPressed: _showSettings,
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // 操作按钮区域
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: _pickVideo,
-                  icon: const Icon(Icons.video_library),
-                  label: Text(localizations.selectVideo),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // 1. Video Area
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 12),
-                ElevatedButton.icon(
-                  onPressed: _selectedVideoPath != null ? _extractAudio : null,
-                  icon: const Icon(Icons.audiotrack),
-                  label: Text(localizations.extractAudio),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                ElevatedButton.icon(
-                  onPressed: _transcribeAudio,
-                  icon: const Icon(Icons.text_fields),
-                  label: Text(localizations.transcribeAudio),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                ),
-                if (_selectedVideoPath != null) ...[
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '已选择视频:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                  clipBehavior: Clip.antiAlias,
+                  child: _selectedVideoPath != null
+                      ? NativeVideoView(
+                          videoPath: _selectedVideoPath!,
+                          onCreated: (controller) {
+                            _videoController = controller;
+                          },
+                          onPositionChanged: (pos) {
+                            if (mounted) {
+                              setState(() {
+                                _currentPosition = pos;
+                              });
+                            }
+                          },
+                          onDurationChanged: (duration) {
+                             if (mounted) {
+                               setState(() {
+                                 _totalDuration = duration;
+                               });
+                             }
+                          },
+                          onPlayerStateChanged: (isPlaying) {
+                             if (mounted) {
+                               setState(() {
+                                 _isPlaying = isPlaying;
+                               });
+                             }
+                          },
+                        )
+                      : Container(
+                          color: Colors.grey[900],
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                               Icon(Icons.video_library_outlined, size: 48, color: Colors.grey[700]),
+                               const SizedBox(height: 8),
+                               Text("No Video Selected", style: TextStyle(color: Colors.grey[700])),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _selectedVideoPath!,
-                          style: const TextStyle(fontSize: 12),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ],
+                ),
+              ),
             ),
-          ),
-          const Divider(),
-          // 日志显示区域
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(8.0),
-              color: Colors.black87,
-              child: _logs.isEmpty
-                  ? const Center(
+
+            // 2. Lyrics Area
+            Expanded(
+              child: _segments.isEmpty
+                  ? Center(
                       child: Text(
-                        '日志将显示在这里...',
-                        style: TextStyle(color: Colors.grey),
+                        _selectedVideoPath == null ? "Tap settings to select video" : "Waiting for transcript...",
+                        style: TextStyle(color: Colors.grey[400]),
                       ),
                     )
-                  : ListView.builder(
-                      reverse: true,
-                      itemCount: _logs.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 2.0,
-                            horizontal: 4.0,
-                          ),
-                          child: Text(
-                            _logs[_logs.length - 1 - index],
-                            style: const TextStyle(
-                              color: Colors.green,
-                              fontSize: 12,
-                              fontFamily: 'monospace',
-                            ),
-                          ),
-                        );
+                  : LyricsView(
+                      segments: _segments,
+                      currentPosition: _currentPosition,
+                      onSegmentTap: (startMs) {
+                        _addLog("Seek to ${startMs}ms (Not implemented)");
                       },
                     ),
             ),
-          ),
-        ],
+
+            // 3. Controller Panel
+            VideoControllerPanel(
+              isPlaying: _isPlaying,
+              currentPosition: Duration(milliseconds: _currentPosition),
+              totalDuration: Duration(milliseconds: _totalDuration > 0 ? _totalDuration : (_segments.isNotEmpty ? _segments.last.end : 0)), 
+              onPlayPause: () {
+                if (_videoController != null) {
+                  if (_isPlaying) {
+                    _videoController!.pause();
+                  } else {
+                    _videoController!.play();
+                  }
+                }
+              },
+              onSeek: (val) {
+                if (_videoController != null) {
+                  _videoController!.seekTo(Duration(milliseconds: val.toInt()));
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

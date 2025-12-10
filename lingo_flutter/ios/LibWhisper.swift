@@ -18,11 +18,27 @@ actor WhisperContext {
         whisper_free(context)
     }
 
-    func fullTranscribe(samples: [Float]) {
+    func transcribeWithProgress(samples: [Float], onProgress: ((Int) -> Void)? = nil) {
         // Leave 2 processors free (i.e. the high-efficiency cores).
         let maxThreads = max(1, min(8, cpuCount() - 2))
         print("Selecting \(maxThreads) threads")
         var params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
+        
+        // Handling progress callback
+        var wrapperPtr: UnsafeMutableRawPointer? = nil
+        if let onProgress = onProgress {
+            let wrapper = WhisperProgressWrapper(onProgress)
+            wrapperPtr = Unmanaged.passRetained(wrapper).toOpaque()
+            params.progress_callback = whisperProgressCallback
+            params.progress_callback_user_data = wrapperPtr
+        }
+        
+        defer {
+            if let wrapperPtr = wrapperPtr {
+                Unmanaged<WhisperProgressWrapper>.fromOpaque(wrapperPtr).release()
+            }
+        }
+        
         "en".withCString { en in
             // Adapted from whisper.objc
             params.print_realtime   = true
@@ -49,11 +65,25 @@ actor WhisperContext {
     }
 
     func getTranscription() -> String {
-        var transcription = ""
+        var segments: [[String: Any]] = []
         for i in 0..<whisper_full_n_segments(context) {
-            transcription += String.init(cString: whisper_full_get_segment_text(context, i))
+            let t0 = whisper_full_get_segment_t0(context, i)
+            let t1 = whisper_full_get_segment_t1(context, i)
+            if let textPtr = whisper_full_get_segment_text(context, i) {
+                let text = String(cString: textPtr)
+                segments.append([
+                    "start": Int(t0) * 10, // Convert to milliseconds
+                    "end": Int(t1) * 10,
+                    "text": text
+                ])
+            }
         }
-        return transcription
+        
+        if let jsonData = try? JSONSerialization.data(withJSONObject: segments, options: []),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            return jsonString
+        }
+        return "[]"
     }
 
     static func benchMemcpy(nThreads: Int32) async -> String {
@@ -154,4 +184,17 @@ actor WhisperContext {
 
 fileprivate func cpuCount() -> Int {
     ProcessInfo.processInfo.processorCount
+}
+
+class WhisperProgressWrapper {
+    let onProgress: (Int) -> Void
+    init(_ onProgress: @escaping (Int) -> Void) {
+        self.onProgress = onProgress
+    }
+}
+
+func whisperProgressCallback(ctx: OpaquePointer?, state: OpaquePointer?, progress: Int32, userData: UnsafeMutableRawPointer?) {
+    guard let userData = userData else { return }
+    let wrapper = Unmanaged<WhisperProgressWrapper>.fromOpaque(userData).takeUnretainedValue()
+    wrapper.onProgress(Int(progress))
 }
