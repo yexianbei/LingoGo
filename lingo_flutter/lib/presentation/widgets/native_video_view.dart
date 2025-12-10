@@ -9,6 +9,12 @@ class NativeVideoViewController {
   Future<void> play() => _channel.invokeMethod('play');
   Future<void> pause() => _channel.invokeMethod('pause');
   Future<void> seekTo(Duration position) => _channel.invokeMethod('seekTo', {'position': position.inMilliseconds});
+  Future<void> updateMetadata({String? title, String? artist, String? thumbnailPath}) => 
+      _channel.invokeMethod('updateMetadata', {
+        'title': title,
+        'artist': artist,
+        'thumbnailPath': thumbnailPath,
+      });
 }
 
 class NativeVideoView extends StatefulWidget {

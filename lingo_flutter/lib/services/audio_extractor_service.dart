@@ -36,6 +36,22 @@ class AudioExtractorService {
     }
   }
 
+  /// Generate thumbnail from video (First frame)
+  /// Returns path to the generated image
+  Future<String?> generateThumbnail(String videoPath) async {
+    try {
+      final String? result = await _channel.invokeMethod<String>(
+        'generateThumbnail',
+        {'videoPath': videoPath},
+      );
+      return result;
+    } on PlatformException catch (e) {
+      // Log or rethrow?
+      print('Thumbnail generation failed: ${e.message}');
+      return null;
+    }
+  }
+
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     if (call.method == 'onProgress' && call.arguments is double) {
       _progressCallback?.call(call.arguments);

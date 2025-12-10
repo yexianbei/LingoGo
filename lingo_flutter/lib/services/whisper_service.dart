@@ -65,4 +65,11 @@ class WhisperService {
       return null;
     }
   }
+  Future<void> release() async {
+    try {
+      await _channel.invokeMethod('releaseContext');
+    } on PlatformException catch (e) {
+      Log.e('WhisperService', '释放模型资源失败', e);
+    }
+  }
 }

@@ -3,6 +3,7 @@ import Flutter
 import Foundation
 import AVKit
 import AVFoundation
+import MediaPlayer
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -29,6 +30,8 @@ import AVFoundation
     audioExtractorChannel?.setMethodCallHandler { [weak self] (call: FlutterMethodCall, result: @escaping FlutterResult) in
       if call.method == "extractAudio" {
         self?.extractAudio(call: call, result: result)
+      } else if call.method == "generateThumbnail" {
+        self?.generateThumbnail(call: call, result: result)
       } else {
         result(FlutterMethodNotImplemented)
       }
@@ -48,6 +51,9 @@ import AVFoundation
               self?.loadWhisperModel(call: call, result: result)
             case "transcribeAudio":
               self?.transcribeAudio(call: call, result: result)
+            case "releaseContext":
+              self?.whisperContext = nil
+              result(true)
             default:
               result(FlutterMethodNotImplemented)
             }
@@ -97,6 +103,49 @@ import AVFoundation
         }
       }
     )
+  }
+
+  // 生成缩略图
+  private func generateThumbnail(call: FlutterMethodCall, result: @escaping FlutterResult) {
+    guard let args = call.arguments as? [String: Any],
+          let videoPath = args["videoPath"] as? String else {
+      result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing videoPath", details: nil))
+      return
+    }
+
+    let videoURL = URL(fileURLWithPath: videoPath)
+    let asset = AVAsset(url: videoURL)
+    let imageGenerator = AVAssetImageGenerator(asset: asset)
+    imageGenerator.appliesPreferredTrackTransform = true
+    
+    // 取第 0 秒
+    let time = CMTime(seconds: 0.0, preferredTimescale: 600)
+    
+    DispatchQueue.global(qos: .userInitiated).async {
+        do {
+            let cgImage = try imageGenerator.copyCGImage(at: time, actualTime: nil)
+            let image = UIImage(cgImage: cgImage)
+            
+            if let data = image.jpegData(compressionQuality: 0.7) {
+                let tempDir = NSTemporaryDirectory()
+                let fileName = "thumbnail_\(Int(Date().timeIntervalSince1970)).jpg"
+                let filePath = (tempDir as NSString).appendingPathComponent(fileName)
+                try data.write(to: URL(fileURLWithPath: filePath))
+                
+                DispatchQueue.main.async {
+                    result(filePath)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    result(FlutterError(code: "IMAGE_ENCODING_FAILED", message: "Failed to encode image", details: nil))
+                }
+            }
+        } catch {
+            DispatchQueue.main.async {
+                result(FlutterError(code: "THUMBNAIL_FAILED", message: error.localizedDescription, details: nil))
+            }
+        }
+    }
   }
     
     // MARK: - Whisper 方法
@@ -284,6 +333,11 @@ class NativeVideoView: NSObject, FlutterPlatformView {
     private var _timeObserver: Any?
     private var _durationObservation: NSKeyValueObservation?
     private var _rateObservation: NSKeyValueObservation?
+    
+    // Metadata for Lock Screen / Now Playing Info
+    private var nowPlayingTitle: String?
+    private var nowPlayingArtist: String?
+    private var nowPlayingThumbnailPath: String?
 
     init(
         frame: CGRect,
@@ -303,20 +357,10 @@ class NativeVideoView: NSObject, FlutterPlatformView {
         }
     }
     
-    deinit {
-        if let player = _playerViewController?.player {
-            if let observer = _timeObserver {
-                player.removeTimeObserver(observer)
-            }
-        }
-        _durationObservation?.invalidate()
-        _rateObservation?.invalidate()
-    }
-
     func view() -> UIView {
         return _view
     }
-    
+
     private func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let player = _playerViewController?.player else {
             result(FlutterError(code: "NO_PLAYER", message: "Player not initialized", details: nil))
@@ -339,15 +383,44 @@ class NativeVideoView: NSObject, FlutterPlatformView {
             } else {
                 result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing position", details: nil))
             }
+        case "updateMetadata":
+            if let args = call.arguments as? [String: Any] {
+                let title = args["title"] as? String
+                let artist = args["artist"] as? String
+                let thumbnailPath = args["thumbnailPath"] as? String
+                
+                self.nowPlayingTitle = title
+                self.nowPlayingArtist = artist
+                self.nowPlayingThumbnailPath = thumbnailPath
+                
+                if let player = _playerViewController?.player {
+                    updateNowPlayingInfo(player: player)
+                }
+                result(nil)
+            } else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Invalid arguments", details: nil))
+            }
         default:
             result(FlutterMethodNotImplemented)
         }
     }
 
+    // MARK: - NativeVideoView Implementation
+
     private func setupPlayer(videoPath: String) {
+        // Configure Audio Session for Background Playback
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Failed to set audio session category: \(error)")
+        }
+
         let videoURL = URL(fileURLWithPath: videoPath)
         let player = AVPlayer(url: videoURL)
+        player.allowsExternalPlayback = true // Allow AirPlay
         player.play()
+        
         let playerViewController = AVPlayerViewController()
         playerViewController.player = player
         
@@ -357,45 +430,117 @@ class NativeVideoView: NSObject, FlutterPlatformView {
         playerViewController.view.frame = _view.bounds
         playerViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
+        // Setup Lock Screen / Command Center
+        setupRemoteCommands(player: player)
+        
         // Add time observer
-        let interval = CMTime(seconds: 0.1, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let interval = CMTime(seconds: 1.0, preferredTimescale: CMTimeScale(NSEC_PER_SEC)) // Update every 1s for info center
         _timeObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
             let milliseconds = Int(CMTimeGetSeconds(time) * 1000)
             self?._channel.invokeMethod("onPositionChanged", arguments: milliseconds)
+            self?.updateNowPlayingInfo(player: player)
         }
         
         // Observe rate (isPlaying)
         _rateObservation = player.observe(\.rate) { [weak self] player, _ in
             let isPlaying = player.rate != 0
             self?._channel.invokeMethod("onPlayerStateChanged", arguments: isPlaying)
+            self?.updateNowPlayingInfo(player: player)
         }
         
-        // Observe duration (via currentItem) - note: duration might be unknown initially
+        // Observe duration
         if let item = player.currentItem {
-             // We can observe the status to know when duration is available
-             // Or observe duration directly if iOS 13+?
-             // Using KVO on duration is reliable once status is ready.
-             // But simpler: just send duration when status becomes ready?
-             // Or periodically check?
-             // Use KVO on status and then check duration.
-             // Actually, simplest is to retrieve duration when status changes to readyToPlay.
-             // Let's rely on standard notifications or KVO.
-             
-             // For simplicity, let's just observe duration directly on currentItem if possible,
-             // or send it when we start playing.
-             
-            let durationObserver = item.observe(\.duration) { [weak self] item, _ in
+             _durationObservation = item.observe(\.duration) { [weak self] item, _ in
                 let seconds = CMTimeGetSeconds(item.duration)
                 if !seconds.isNaN {
                     let milliseconds = Int(seconds * 1000)
                     self?._channel.invokeMethod("onDurationChanged", arguments: milliseconds)
+                    self?.updateNowPlayingInfo(player: player)
                 }
             }
-             // Keep reference to avoid dealloc
-             // But we need to store it. I used _durationObservation.
-             // Hack: let's store it in a separate property or list if multiple.
-             // Re-using _durationObservation for item duration.
-             _durationObservation = durationObserver
         }
+    }
+    
+    private func setupRemoteCommands(player: AVPlayer) {
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.addTarget { [weak player] event in
+            guard let player = player else { return .commandFailed }
+            player.play()
+            return .success
+        }
+        
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.pauseCommand.addTarget { [weak player] event in
+            guard let player = player else { return .commandFailed }
+            player.pause()
+            return .success
+        }
+        
+        // Add Seek Backward/Forward if desired
+        commandCenter.skipBackwardCommand.isEnabled = true
+        commandCenter.skipBackwardCommand.preferredIntervals = [15]
+        commandCenter.skipBackwardCommand.addTarget { [weak player] event in
+             guard let player = player else { return .commandFailed }
+             let newTime = CMTimeAdd(player.currentTime(), CMTime(seconds: -15, preferredTimescale: 1))
+             player.seek(to: newTime)
+             return .success
+        }
+        
+        commandCenter.skipForwardCommand.isEnabled = true
+        commandCenter.skipForwardCommand.preferredIntervals = [15]
+        commandCenter.skipForwardCommand.addTarget { [weak player] event in
+             guard let player = player else { return .commandFailed }
+             let newTime = CMTimeAdd(player.currentTime(), CMTime(seconds: 15, preferredTimescale: 1))
+             player.seek(to: newTime)
+             return .success
+        }
+    }
+    
+    private func updateNowPlayingInfo(player: AVPlayer) {
+        var nowPlayingInfo = [String: Any]()
+        
+        // Set basic info
+        nowPlayingInfo[MPMediaItemPropertyTitle] = nowPlayingTitle ?? "Video Playback"
+        if let artist = nowPlayingArtist {
+            nowPlayingInfo[MPMediaItemPropertyArtist] = artist
+        }
+        
+        // precise lock screen image
+        if let thumbnailPath = nowPlayingThumbnailPath {
+             let url = URL(fileURLWithPath: thumbnailPath)
+             if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                 let artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in return image }
+                 nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+             }
+        } 
+        
+        if let item = player.currentItem {
+            let duration = CMTimeGetSeconds(item.duration)
+            if !duration.isNaN {
+                 nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = duration
+            }
+            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(player.currentTime())
+        }
+        
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
+
+    deinit {
+        // Cleanup
+        if let player = _playerViewController?.player {
+             player.pause()
+             if let observer = _timeObserver {
+                player.removeTimeObserver(observer)
+             }
+        }
+        _durationObservation?.invalidate()
+        _rateObservation?.invalidate()
+        
+        // Clear Now Playing Info
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
     }
 }

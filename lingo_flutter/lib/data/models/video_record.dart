@@ -9,6 +9,8 @@ class VideoRecord {
   final int size;     // Bytes
   final List<SubtitleSegment> transcript;
   final int createdAt;
+  final int lastPosition; // Milliseconds
+  final String? thumbnailPath;
 
   VideoRecord({
     this.id,
@@ -18,6 +20,8 @@ class VideoRecord {
     this.size = 0,
     required this.transcript,
     required this.createdAt,
+    this.lastPosition = 0,
+    this.thumbnailPath,
   });
 
   factory VideoRecord.fromJson(Map<String, dynamic> json) {
@@ -40,6 +44,8 @@ class VideoRecord {
       size: json['size'] as int? ?? 0,
       transcript: loadedTranscript,
       createdAt: json['createdAt'] as int,
+      lastPosition: json['lastPosition'] as int? ?? 0,
+      thumbnailPath: json['thumbnailPath'] as String?,
     );
   }
 
@@ -52,6 +58,8 @@ class VideoRecord {
       'size': size,
       'transcript': jsonEncode(transcript.map((e) => e.toJson()).toList()),
       'createdAt': createdAt,
+      'lastPosition': lastPosition,
+      'thumbnailPath': thumbnailPath,
     };
   }
 }

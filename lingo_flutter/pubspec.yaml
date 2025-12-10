@@ -38,6 +38,7 @@ dependencies:
   
   # 文件选择
   image_picker: ^1.0.7
+  translator: ^1.0.4+1
 
 dev_dependencies:
   flutter_test:

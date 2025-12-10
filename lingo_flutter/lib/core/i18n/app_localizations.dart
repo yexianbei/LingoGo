@@ -27,6 +27,7 @@ class AppLocalizations {
   String get selectVideo => _getText('select_video');
   String get extractAudio => _getText('extract_audio');
   String get transcribeAudio => _getText('transcribe_audio');
+  String get transcribingDoNotExit => _getText('transcribing_do_not_exit');
 
   String _getText(String key) {
     switch (locale) {
@@ -50,6 +51,7 @@ class AppLocalizations {
     'select_video': '选择视频文件',
     'extract_audio': '提取音频',
     'transcribe_audio': '转录音频',
+    'transcribing_do_not_exit': '正在转录中，请不要退出。',
   };
 
   static const Map<String, String> _enUS = {
@@ -63,6 +65,7 @@ class AppLocalizations {
     'select_video': 'Select Video',
     'extract_audio': 'Extract Audio',
     'transcribe_audio': 'Transcribe Audio',
+    'transcribing_do_not_exit': 'Transcribing, please do not exit.',
   };
 
   static const Map<String, String> _jaJP = {
@@ -76,6 +79,7 @@ class AppLocalizations {
     'select_video': '動画を選択',
     'extract_audio': '音声を抽出',
     'transcribe_audio': '音声を文字起こし',
+    'transcribing_do_not_exit': '転写中、終了しないでください。',
   };
 }
 

@@ -42,6 +42,7 @@ class _DebugPageState extends State<DebugPage> {
   int _progress = 0;
   bool _isTranscribing = false;
   StreamSubscription? _progressSubscription;
+  String? _currentThumbnailPath; // Add this
 
   @override
   void initState() {
@@ -60,8 +61,33 @@ class _DebugPageState extends State<DebugPage> {
 
   @override
   void dispose() {
+    _saveCurrentProgress();
+    _videoController?.pause();
+    _whisperService.release();
     _progressSubscription?.cancel();
     super.dispose();
+  }
+
+  Future<void> _saveCurrentProgress() async {
+    if (_selectedVideoPath != null) {
+       final File videoFile = File(_selectedVideoPath!);
+       final int fileSize = await videoFile.length();
+       final String fileName = videoFile.path.split('/').last;
+
+       final record = VideoRecord(
+         path: _selectedVideoPath!,
+         name: fileName,
+         size: fileSize,
+         duration: _totalDuration,
+         transcript: _segments,
+         createdAt: DateTime.now().millisecondsSinceEpoch,
+         lastPosition: _currentPosition,
+         thumbnailPath: _currentThumbnailPath, // Save thumbnail
+       );
+       
+       await _databaseService.saveVideoRecord(record);
+       Log.i('DebugPage', 'Saved progress: $_currentPosition ms');
+    }
   }
 
   void _addLog(String message) {
@@ -102,6 +128,9 @@ class _DebugPageState extends State<DebugPage> {
            // No record or empty transcript. Auto extract.
            _extractAudio();
         }
+        
+        // Generate thumbnail
+        _generateThumbnail(video.path);
       } else {
         _addLog('用户取消了视频选择');
       }
@@ -124,11 +153,36 @@ class _DebugPageState extends State<DebugPage> {
                }
              });
              _addLog('已自动加载上次播放的视频: ${record.name}');
+             
+             // If controller is ready, seek and play.
+             if (_videoController != null && record.lastPosition > 0) {
+               _videoController!.seekTo(Duration(milliseconds: record.lastPosition));
+               _addLog('恢复播放进度: ${record.lastPosition}ms');
+             }
+             if (_videoController != null) {
+                _videoController!.play();
+                _videoController!.updateMetadata(
+                  title: record.name,
+                  thumbnailPath: record.thumbnailPath,
+                );
+             }
         }
       }
     } catch (e) {
       Log.e('DebugPage', '加载上次视频失败', e);
     }
+  }
+
+  Future<void> _restoreLastPosition() async {
+     if (_selectedVideoPath == null || _videoController == null) return;
+     
+     final record = await _databaseService.getVideoRecord(_selectedVideoPath!);
+     if (record != null && record.lastPosition > 0) {
+        _videoController!.seekTo(Duration(milliseconds: record.lastPosition));
+        _addLog('恢复播放进度: ${record.lastPosition}ms');
+     }
+     // Auto-play
+     _videoController!.play();
   }
 
   Future<void> _extractAudio() async {
@@ -178,6 +232,27 @@ class _DebugPageState extends State<DebugPage> {
       _addLog('提取音频时发生错误: $e');
       Log.e('DebugPage', '提取音频失败', e, stackTrace);
     }
+  }
+
+  Future<void> _generateThumbnail(String videoPath) async {
+      try {
+          final String? thumbPath = await _audioExtractorService.generateThumbnail(videoPath);
+          if (thumbPath != null) {
+              setState(() {
+                  _currentThumbnailPath = thumbPath;
+              });
+              _addLog('缩略图生成成功: $thumbPath');
+              
+              // Update metadata
+              final String fileName = videoPath.split('/').last;
+              _videoController?.updateMetadata(
+                title: fileName,
+                thumbnailPath: thumbPath,
+              );
+          }
+      } catch (e) {
+          Log.e('DebugPage', '生成缩略图失败', e);
+      }
   }
 
   /// 初始化模型
@@ -324,6 +399,8 @@ class _DebugPageState extends State<DebugPage> {
                    duration: _totalDuration,
                    transcript: segments,
                    createdAt: DateTime.now().millisecondsSinceEpoch,
+                   lastPosition: _currentPosition, // Save current pos
+                   thumbnailPath: _currentThumbnailPath,
                  );
                  
                  await _databaseService.saveVideoRecord(record);
@@ -502,9 +579,9 @@ class _DebugPageState extends State<DebugPage> {
           children: [
             // 1. Video Area
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               child: AspectRatio(
-                aspectRatio: 16 / 9,
+                aspectRatio: 20 / 9, // Reduced height by ~20% (16/9 * 1.25)
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,
@@ -523,6 +600,15 @@ class _DebugPageState extends State<DebugPage> {
                           videoPath: _selectedVideoPath!,
                           onCreated: (controller) {
                             _videoController = controller;
+                            // Check if we have a last position from DB to seek to (if not already handled)
+                            _restoreLastPosition();
+                            
+                            // Initialize metadata if available
+                             final fileName = _selectedVideoPath!.split('/').last;
+                             _videoController?.updateMetadata(
+                               title: fileName,
+                               thumbnailPath: _currentThumbnailPath, // Might be null initially, but updated later
+                             );
                           },
                           onPositionChanged: (pos) {
                             if (mounted) {
@@ -566,10 +652,43 @@ class _DebugPageState extends State<DebugPage> {
             Expanded(
               child: _segments.isEmpty
                   ? Center(
-                      child: Text(
-                        _selectedVideoPath == null ? "Tap settings to select video" : "Waiting for transcript...",
-                        style: TextStyle(color: Colors.grey[400]),
-                      ),
+                      child: _selectedVideoPath == null
+                          ? Text(
+                              "Tap settings to select video",
+                              style: TextStyle(color: Colors.grey[400]),
+                            )
+                          : Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  _isTranscribing
+                                      ? AppLocalizations.of(context).transcribingDoNotExit
+                                      : "No transcript available",
+                                  style: TextStyle(color: Colors.grey[400]),
+                                ),
+                                const SizedBox(height: 16),
+                                _isTranscribing
+                                    ? Column(
+                                        children: [
+                                          const CircularProgressIndicator(),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            "${_progress}%",
+                                            style: const TextStyle(color: Colors.grey),
+                                          ),
+                                        ],
+                                      )
+                                    : ElevatedButton.icon(
+                                        onPressed: _transcribeAudio,
+                                        icon: const Icon(Icons.transcribe),
+                                        label: Text(AppLocalizations.of(context).transcribeAudio),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blue,
+                                          foregroundColor: Colors.white,
+                                        ),
+                                      ),
+                              ],
+                            ),
                     )
                   : LyricsView(
                       segments: _segments,
@@ -579,6 +698,8 @@ class _DebugPageState extends State<DebugPage> {
                       },
                     ),
             ),
+            
+            const SizedBox(height: 16),
 
             // 3. Controller Panel
             VideoControllerPanel(

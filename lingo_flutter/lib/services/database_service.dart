@@ -25,13 +25,29 @@ class DatabaseService {
     String path = join(await getDatabasesPath(), 'lingogo.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 4,
       onCreate: (db, version) async {
         await _createVideosTable(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
           await _createVideosTable(db);
+        }
+        if (oldVersion < 3) {
+           // Add lastPosition column
+           try {
+             await db.execute('ALTER TABLE videos ADD COLUMN lastPosition INTEGER DEFAULT 0');
+           } catch (e) {
+             Log.e('DatabaseService', 'Error adding lastPosition column', e);
+           }
+        }
+        if (oldVersion < 4) {
+           // Add thumbnailPath column
+           try {
+             await db.execute('ALTER TABLE videos ADD COLUMN thumbnailPath TEXT');
+           } catch (e) {
+             Log.e('DatabaseService', 'Error adding thumbnailPath column', e);
+           }
         }
       },
     );
@@ -46,7 +62,9 @@ class DatabaseService {
         duration INTEGER,
         size INTEGER,
         transcript TEXT,
-        createdAt INTEGER
+        createdAt INTEGER,
+        lastPosition INTEGER DEFAULT 0,
+        thumbnailPath TEXT
       )
     ''');
   }

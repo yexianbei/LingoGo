@@ -57,9 +57,13 @@ class VideoControllerPanel extends StatelessWidget {
           // 2. Progress Slider
           Row(
             children: [
-              Text(
-                _formatDuration(currentPosition),
-                style: TextStyle(color: Colors.grey[400], fontSize: 12),
+              SizedBox(
+                width: 48,
+                child: Text(
+                  _formatDuration(currentPosition),
+                  style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
               ),
               Expanded(
                 child: SliderTheme(
@@ -79,9 +83,13 @@ class VideoControllerPanel extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(
-                _formatDuration(totalDuration),
-                style: TextStyle(color: Colors.grey[400], fontSize: 12),
+              SizedBox(
+                width: 48,
+                child: Text(
+                  _formatDuration(totalDuration),
+                  style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),

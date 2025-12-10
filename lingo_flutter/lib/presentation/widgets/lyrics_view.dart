@@ -20,10 +20,12 @@ class LyricsView extends StatefulWidget {
 
 class _LyricsViewState extends State<LyricsView> {
   final ScrollController _scrollController = ScrollController();
-  static const double _itemHeight = 80.0; // Increased height
+  static const double _contentHeight = 100.0;
+  static const double _verticalMargin = 8.0; // 4 top + 4 bottom
+  static const double _totalItemHeight = _contentHeight + _verticalMargin;
+  
   int _activeIndex = -1;
 
-  @override
   @override
   void didUpdateWidget(LyricsView oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -66,16 +68,12 @@ class _LyricsViewState extends State<LyricsView> {
   void _autoScroll(int index) {
     if (index < 0 || !_scrollController.hasClients) return;
     
-    // Center the item more accurately
-    double screenHeight = MediaQuery.of(context).size.height;
-    // We want the active item to be roughly in the middle of the available space
-    // Since we don't know exact container height here easily without LayoutBuilder,
-    // we assume the list takes up significant space.
-    // Let's try to center it:
-    double offset = (index * _itemHeight) - (screenHeight * 0.2); // Simple offset
+    // Center the item
+    // With symmetric padding calculated in build, offset = index * totalHeight centers it.
+    double offset = index * _totalItemHeight;
     
     _scrollController.animateTo(
-      offset > 0 ? offset : 0, 
+      offset, 
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
@@ -83,36 +81,46 @@ class _LyricsViewState extends State<LyricsView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      controller: _scrollController,
-      padding: const EdgeInsets.symmetric(vertical: 200), // Huge padding to allow centering top/bottom items
-      itemCount: widget.segments.length,
-      itemBuilder: (context, index) {
-        final segment = widget.segments[index];
-        final bool isActive = index == _activeIndex;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Symmetric padding to center the item
+        final double verticalPadding = (constraints.maxHeight - _totalItemHeight) / 2;
+        final double safePadding = verticalPadding > 0 ? verticalPadding : 0;
+        
+        return ListView.builder(
+          controller: _scrollController,
+          padding: EdgeInsets.symmetric(vertical: safePadding),
+          itemCount: widget.segments.length,
+          itemBuilder: (context, index) {
+            final segment = widget.segments[index];
+            final bool isActive = index == _activeIndex;
 
-        return GestureDetector(
-          onTap: () => widget.onSegmentTap(segment.start),
-          child: Container(
-            // Remove fixed height constraint or make it minHeight?
-            // Fixed height is easier for scrolling calc.
-            height: _itemHeight, 
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            color: Colors.transparent, // Hit test
-            child: Text(
-              segment.text,
-              style: TextStyle(
-                color: isActive ? Colors.black : Colors.grey[400],
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-                fontSize: isActive ? 18 : 16,
-                height: 1.5,
+            return GestureDetector(
+              onTap: () => widget.onSegmentTap(segment.start),
+              child: Container(
+                height: _contentHeight, 
+                alignment: Alignment.centerLeft,
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: isActive ? BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 2),
+                  borderRadius: BorderRadius.circular(8),
+                ) : null,
+                child: Text(
+                  segment.text,
+                  style: TextStyle(
+                    color: isActive ? Colors.black : Colors.grey[400],
+                    fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+                    fontSize: isActive ? 18 : 16,
+                    height: 1.5,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                ),
               ),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.left,
-            ),
-          ),
+            );
+          },
         );
       },
     );
