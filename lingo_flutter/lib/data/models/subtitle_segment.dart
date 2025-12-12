@@ -24,4 +24,16 @@ class SubtitleSegment {
       'text': text,
     };
   }
+
+  SubtitleSegment copyWith({
+    int? start,
+    int? end,
+    String? text,
+  }) {
+    return SubtitleSegment(
+      start: start ?? this.start,
+      end: end ?? this.end,
+      text: text ?? this.text,
+    );
+  }
 }

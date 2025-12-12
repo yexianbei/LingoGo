@@ -26,10 +26,10 @@ class VideoControllerPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-         borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
          boxShadow: [
            BoxShadow(
              color: Colors.black.withOpacity(0.05),
@@ -52,7 +52,7 @@ class VideoControllerPanel extends StatelessWidget {
               _buildControlItem(Icons.mic_none, '跟读'),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 8),
 
           // 2. Progress Slider
           Row(
@@ -72,7 +72,7 @@ class VideoControllerPanel extends StatelessWidget {
                     activeTrackColor: Colors.orange,
                     inactiveTrackColor: Colors.grey[200],
                     thumbColor: Colors.white,
-                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8, elevation: 2),
+                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6, elevation: 2), // Slightly smaller thumb
                     overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
                   ),
                   child: Slider(
@@ -93,61 +93,35 @@ class VideoControllerPanel extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 4),
 
-          // 3. Playback Controls (Skip, Play/Pause)
+          // 3. Playback Controls (Play/Pause Only)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-               IconButton(
-                 onPressed: () {},
-                 icon: const Icon(Icons.replay_10), // Using replay_10 as approx for loop
-                 color: Colors.black87,
-               ),
-               const SizedBox(width: 24),
-               IconButton(
-                 onPressed: () {}, // TODO: Implement Skip 15s Back
-                 icon: const Icon(Icons.rotate_left, size: 28),
-                 color: Colors.black87,
-               ),
-               const SizedBox(width: 24),
-               
                // Play/Pause Button
                GestureDetector(
                  onTap: onPlayPause,
                  child: Container(
-                   width: 64,
-                   height: 64,
+                   width: 48,
+                   height: 48,
                    decoration: const BoxDecoration(
                      color: Colors.orange,
                      shape: BoxShape.circle,
                      boxShadow: [
                        BoxShadow(
                          color: Colors.orangeAccent,
-                         blurRadius: 10,
-                         offset: Offset(0, 4),
+                         blurRadius: 8,
+                         offset: Offset(0, 3),
                        )
                      ]
                    ),
                    child: Icon(
                      isPlaying ? Icons.pause : Icons.play_arrow_rounded,
                      color: Colors.white,
-                     size: 40,
+                     size: 28,
                    ),
                  ),
-               ),
-               
-               const SizedBox(width: 24),
-               IconButton(
-                 onPressed: () {}, // TODO: Implement Skip 15s Forward
-                 icon: const Icon(Icons.rotate_right, size: 28),
-                 color: Colors.black87,
-               ),
-               const SizedBox(width: 24),
-               IconButton(
-                 onPressed: () {},
-                 icon: const Icon(Icons.inbox_outlined), // Using inbox as placeholder for last icon
-                 color: Colors.black87,
                ),
             ],
           ),

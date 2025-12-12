@@ -44,3 +44,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# MLC Model files (large binary files, should not be version controlled)
+ios/bundle/Qwen2.5-1.5B-Instruct-q4f16_1/
+
+# MLC Static libraries (large binary files, should not be version controlled)
+ios/Frameworks/MLCLibs/

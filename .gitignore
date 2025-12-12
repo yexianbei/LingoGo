@@ -4,3 +4,7 @@ lingo_flutter/ios/Resources/models/ggml-base.bin
 *.bin
 # whisper.xcframework 相关大文件
 lingo_flutter/ios/whisper.xcframework/
+
+lingo_flutter/ios/bundle.zip
+lingo_flutter/ios/Frameworks/MLCLibs.zip
+lingo_flutter/FLUTTER_MIGRATION_GUIDE.md

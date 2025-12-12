@@ -17,6 +17,13 @@ import MediaPlayer
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
     
+    // 注册 MLC Bridge
+    if #available(iOS 14.0, *) {
+      if let mlcRegistrar = self.registrar(forPlugin: "MLCBridge") {
+        MLCBridge.register(with: mlcRegistrar)
+      }
+    }
+    
     // 注册方法通道
     guard let controller = window?.rootViewController as? FlutterViewController else {
       return super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -38,27 +45,26 @@ import MediaPlayer
     }
     
       // Whisper 转录通道
-      whisperChannel = FlutterMethodChannel(
-            name: "whisper_transcribe",
-            binaryMessenger: controller.binaryMessenger
-          )
-          
-          whisperChannel?.setMethodCallHandler { [weak self] (call: FlutterMethodCall, result: @escaping FlutterResult) in
-            switch call.method {
-            case "getModelPath":
-              self?.getWhisperModelPath(result: result)
-            case "loadModel":
-              self?.loadWhisperModel(call: call, result: result)
-            case "transcribeAudio":
-              self?.transcribeAudio(call: call, result: result)
-            case "releaseContext":
-              self?.whisperContext = nil
-              result(true)
-            default:
-              result(FlutterMethodNotImplemented)
-            }
-          }
-          
+    whisperChannel = FlutterMethodChannel(
+      name: "whisper_transcribe",
+      binaryMessenger: controller.binaryMessenger
+    )
+    
+    whisperChannel?.setMethodCallHandler { [weak self] (call: FlutterMethodCall, result: @escaping FlutterResult) in
+      switch call.method {
+      case "getModelPath":
+        self?.getWhisperModelPath(result: result)
+      case "loadModel":
+        self?.loadWhisperModel(call: call, result: result)
+      case "transcribeAudio":
+        self?.transcribeAudio(call: call, result: result)
+      case "releaseContext":
+        self?.whisperContext = nil
+        result(true)
+      default:
+        result(FlutterMethodNotImplemented)
+      }
+    }
       
       // 注册 NativeVideoViewFactory
       let registrar = self.registrar(forPlugin: "NativeVideoView")
@@ -153,51 +159,15 @@ import MediaPlayer
       /// 获取 Whisper 模型路径
       private func getWhisperModelPath(result: @escaping FlutterResult) {
         let fileManager = FileManager.default
-        let modelNames = ["ggml-tiny.bin", "ggml-base.bin", "ggml-small.bin", "ggml-medium.bin", "ggml-large.bin"]
-        // 兼容不同的资源组织方式：蓝色文件夹(保留目录) 或 黄色组(扁平复制)
-        let bundleSubdirs: [String?] = ["models", "model", nil] // nil 表示 Bundle 根目录
+        let modelNames = [
+            "ggml-large-v3.bin", "ggml-large-v3-turbo.bin", "ggml-large.bin",
+            "ggml-medium.bin", "ggml-small.bin", "ggml-base.bin", "ggml-tiny.bin",
+            "ggml-model.bin"
+        ]
         
-        // 从应用包中查找模型文件（兼容多种子目录）
-        if let bundlePath = Bundle.main.resourcePath {
-          print("[Whisper] Bundle 根路径: \(bundlePath)")
-          
-          for subdir in bundleSubdirs {
-            let subdirDesc = subdir ?? "(bundle 根)"
-            print("[Whisper] 尝试子目录: \(subdirDesc)")
-            
-            for modelName in modelNames {
-              // 拆分文件名和扩展名
-              let parts = modelName.split(separator: ".")
-              guard parts.count >= 2 else { continue }
-              let baseName = parts.dropLast().joined(separator: ".")
-              let ext = String(parts.last!)
-              
-              // 使用 Bundle API 查找，避免依赖固定目录结构
-              if let url = Bundle.main.url(forResource: baseName, withExtension: ext, subdirectory: subdir) {
-                let path = url.path
-                print("[Whisper] 找到模型文件: \(path)")
-                result(path)
-                return
-              } else {
-                // 打印检查路径方便定位
-                if let subdir {
-                  let probed = (Bundle.main.resourcePath! as NSString).appendingPathComponent(subdir).appending("/\(modelName)")
-                  print("[Whisper] 未命中: \(probed)")
-                } else {
-                  let probed = (Bundle.main.resourcePath! as NSString).appendingPathComponent(modelName)
-                  print("[Whisper] 未命中: \(probed)")
-                }
-              }
-            }
-          }
-        } else {
-          print("[Whisper] 无法获取应用包路径")
-        }
-        
-        // 如果应用包中找不到，尝试从文档目录查找
+        // 1. 优先尝试从文档目录查找 (允许用户替换模型)
         if let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
           let modelsPath = documentsPath.appendingPathComponent("models").path
-          print("[Whisper] 查找文档目录路径: \(modelsPath)")
           
           // 如果目录不存在，尝试创建
           if !fileManager.fileExists(atPath: modelsPath) {
@@ -211,13 +181,40 @@ import MediaPlayer
           
           for modelName in modelNames {
             let modelPath = "\(modelsPath)/\(modelName)"
-            print("[Whisper] 检查文档目录模型文件: \(modelPath)")
             if fileManager.fileExists(atPath: modelPath) {
               print("[Whisper] 找到文档目录模型文件: \(modelPath)")
               result(modelPath)
               return
             }
           }
+        }
+        
+        // 2. 尝试从应用包中查找
+        // 兼容不同的资源组织方式：蓝色文件夹(保留目录) 或 黄色组(扁平复制)
+        let bundleSubdirs: [String?] = ["models", "model", nil] // nil 表示 Bundle 根目录
+        
+        if let bundlePath = Bundle.main.resourcePath {
+          print("[Whisper] Bundle 根路径: \(bundlePath)")
+          
+          for subdir in bundleSubdirs {
+            for modelName in modelNames {
+              // 拆分文件名和扩展名
+              let parts = modelName.split(separator: ".")
+              guard parts.count >= 2 else { continue }
+              let baseName = parts.dropLast().joined(separator: ".")
+              let ext = String(parts.last!)
+              
+              // 使用 Bundle API 查找
+              if let url = Bundle.main.url(forResource: baseName, withExtension: ext, subdirectory: subdir) {
+                let path = url.path
+                print("[Whisper] 找到 Bundle 模型文件: \(path)")
+                result(path)
+                return
+              }
+            }
+          }
+        } else {
+          print("[Whisper] 无法获取应用包路径")
         }
         
         // 如果都找不到，返回 nil

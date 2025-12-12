@@ -3,13 +3,74 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		044F51FD2EE991D300ADDE23 /* jfk.wav in Resources */ = {isa = PBXBuildFile; fileRef = 044F51FA2EE991D300ADDE23 /* jfk.wav */; };
-		044F51FE2EE991D300ADDE23 /* ggml-tiny.bin in Resources */ = {isa = PBXBuildFile; fileRef = 044F51F82EE991D300ADDE23 /* ggml-tiny.bin */; };
+		1481909F2EEA538B0053B510 /* ggml-base.bin in Resources */ = {isa = PBXBuildFile; fileRef = 1481909E2EEA538B0053B510 /* ggml-base.bin */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		14A722AF2EEC00D3008163C8 /* libtvm_ffi_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14A722AC2EEC00D3008163C8 /* libtvm_ffi_static.a */; };
+		14A722B02EEC00D3008163C8 /* libtokenizers_cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14A722AB2EEC00D3008163C8 /* libtokenizers_cpp.a */; };
+		14A722B12EEC00D3008163C8 /* libmodel_iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14A722A82EEC00D3008163C8 /* libmodel_iphone.a */; };
+		14A722B22EEC00D3008163C8 /* libsentencepiece.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14A722A92EEC00D3008163C8 /* libsentencepiece.a */; };
+		14A722B32EEC00D3008163C8 /* libtvm_runtime.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14A722AD2EEC00D3008163C8 /* libtvm_runtime.a */; };
+		14A722B42EEC00D3008163C8 /* libmlc_llm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14A722A72EEC00D3008163C8 /* libmlc_llm.a */; };
+		14A722B52EEC00D3008163C8 /* libtokenizers_c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14A722AA2EEC00D3008163C8 /* libtokenizers_c.a */; };
+		14A7231D2EEC01D1008163C8 /* MLCSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 14A7231C2EEC01D1008163C8 /* MLCSwift */; };
+		14A723232EEC0FF0008163C8 /* MLCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A7231F2EEC0FF0008163C8 /* MLCBridge.swift */; };
+		14A723242EEC0FF0008163C8 /* MLCAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A7231E2EEC0FF0008163C8 /* MLCAppState.swift */; };
+		14A723252EEC0FF0008163C8 /* MLCChatState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A723202EEC0FF0008163C8 /* MLCChatState.swift */; };
+		14A723262EEC0FF0008163C8 /* MLCModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A723212EEC0FF0008163C8 /* MLCModels.swift */; };
+		14A7235B2EEC1907008163C8 /* params_shard_10.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7233F2EEC1907008163C8 /* params_shard_10.bin */; };
+		14A7235C2EEC1907008163C8 /* params_shard_14.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723432EEC1907008163C8 /* params_shard_14.bin */; };
+		14A7235D2EEC1907008163C8 /* merges.txt in Resources */ = {isa = PBXBuildFile; fileRef = 14A723322EEC1907008163C8 /* merges.txt */; };
+		14A7235E2EEC1907008163C8 /* dbnavigator.xml in Resources */ = {isa = PBXBuildFile; fileRef = 14A723282EEC1907008163C8 /* dbnavigator.xml */; };
+		14A7235F2EEC1907008163C8 /* workspace.xml in Resources */ = {isa = PBXBuildFile; fileRef = 14A7232F2EEC1907008163C8 /* workspace.xml */; };
+		14A723602EEC1907008163C8 /* params_shard_9.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7233E2EEC1907008163C8 /* params_shard_9.bin */; };
+		14A723612EEC1907008163C8 /* .gitattributes in Resources */ = {isa = PBXBuildFile; fileRef = 14A723312EEC1907008163C8 /* .gitattributes */; };
+		14A723622EEC1907008163C8 /* vocab.json in Resources */ = {isa = PBXBuildFile; fileRef = 14A723572EEC1907008163C8 /* vocab.json */; };
+		14A723632EEC1907008163C8 /* params_shard_1.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723362EEC1907008163C8 /* params_shard_1.bin */; };
+		14A723642EEC1907008163C8 /* params_shard_18.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723472EEC1907008163C8 /* params_shard_18.bin */; };
+		14A723652EEC1907008163C8 /* modules.xml in Resources */ = {isa = PBXBuildFile; fileRef = 14A7232C2EEC1907008163C8 /* modules.xml */; };
+		14A723662EEC1907008163C8 /* params_shard_26.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7234F2EEC1907008163C8 /* params_shard_26.bin */; };
+		14A723672EEC1907008163C8 /* params_shard_25.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7234E2EEC1907008163C8 /* params_shard_25.bin */; };
+		14A723682EEC1907008163C8 /* misc.xml in Resources */ = {isa = PBXBuildFile; fileRef = 14A7232B2EEC1907008163C8 /* misc.xml */; };
+		14A723692EEC1907008163C8 /* mlc-app-config.json in Resources */ = {isa = PBXBuildFile; fileRef = 14A723592EEC1907008163C8 /* mlc-app-config.json */; };
+		14A7236A2EEC1907008163C8 /* params_shard_29.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723522EEC1907008163C8 /* params_shard_29.bin */; };
+		14A7236B2EEC1907008163C8 /* params_shard_27.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723502EEC1907008163C8 /* params_shard_27.bin */; };
+		14A7236C2EEC1907008163C8 /* params_shard_13.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723422EEC1907008163C8 /* params_shard_13.bin */; };
+		14A7236D2EEC1907008163C8 /* params_shard_11.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723402EEC1907008163C8 /* params_shard_11.bin */; };
+		14A7236E2EEC1907008163C8 /* params_shard_23.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7234C2EEC1907008163C8 /* params_shard_23.bin */; };
+		14A7236F2EEC1907008163C8 /* params_shard_22.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7234B2EEC1907008163C8 /* params_shard_22.bin */; };
+		14A723702EEC1907008163C8 /* params_shard_28.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723512EEC1907008163C8 /* params_shard_28.bin */; };
+		14A723712EEC1907008163C8 /* markdown-navigator.xml in Resources */ = {isa = PBXBuildFile; fileRef = 14A723292EEC1907008163C8 /* markdown-navigator.xml */; };
+		14A723722EEC1907008163C8 /* params_shard_17.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723462EEC1907008163C8 /* params_shard_17.bin */; };
+		14A723732EEC1907008163C8 /* ndarray-cache.json in Resources */ = {isa = PBXBuildFile; fileRef = 14A723342EEC1907008163C8 /* ndarray-cache.json */; };
+		14A723742EEC1907008163C8 /* params_shard_5.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7233A2EEC1907008163C8 /* params_shard_5.bin */; };
+		14A723752EEC1907008163C8 /* markdown-navigator-enh.xml in Resources */ = {isa = PBXBuildFile; fileRef = 14A7232A2EEC1907008163C8 /* markdown-navigator-enh.xml */; };
+		14A723762EEC1907008163C8 /* params_shard_8.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7233D2EEC1907008163C8 /* params_shard_8.bin */; };
+		14A723772EEC1907008163C8 /* params_shard_20.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723492EEC1907008163C8 /* params_shard_20.bin */; };
+		14A723782EEC1907008163C8 /* mlc-chat-config.json in Resources */ = {isa = PBXBuildFile; fileRef = 14A723332EEC1907008163C8 /* mlc-chat-config.json */; };
+		14A723792EEC1907008163C8 /* params_shard_4.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723392EEC1907008163C8 /* params_shard_4.bin */; };
+		14A7237A2EEC1907008163C8 /* params_shard_21.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7234A2EEC1907008163C8 /* params_shard_21.bin */; };
+		14A7237B2EEC1907008163C8 /* params_shard_6.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7233B2EEC1907008163C8 /* params_shard_6.bin */; };
+		14A7237C2EEC1907008163C8 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 14A723272EEC1907008163C8 /* .gitignore */; };
+		14A7237D2EEC1907008163C8 /* tokenizer.json in Resources */ = {isa = PBXBuildFile; fileRef = 14A723552EEC1907008163C8 /* tokenizer.json */; };
+		14A7237E2EEC1907008163C8 /* tensor-cache.json in Resources */ = {isa = PBXBuildFile; fileRef = 14A723542EEC1907008163C8 /* tensor-cache.json */; };
+		14A7237F2EEC1907008163C8 /* Qwen2.5-1.5B-Instruct-q4f16_1-MLC.iml in Resources */ = {isa = PBXBuildFile; fileRef = 14A7232D2EEC1907008163C8 /* Qwen2.5-1.5B-Instruct-q4f16_1-MLC.iml */; };
+		14A723802EEC1907008163C8 /* params_shard_7.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7233C2EEC1907008163C8 /* params_shard_7.bin */; };
+		14A723812EEC1907008163C8 /* params_shard_12.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723412EEC1907008163C8 /* params_shard_12.bin */; };
+		14A723822EEC1907008163C8 /* vcs.xml in Resources */ = {isa = PBXBuildFile; fileRef = 14A7232E2EEC1907008163C8 /* vcs.xml */; };
+		14A723832EEC1907008163C8 /* params_shard_19.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723482EEC1907008163C8 /* params_shard_19.bin */; };
+		14A723842EEC1907008163C8 /* params_shard_3.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723382EEC1907008163C8 /* params_shard_3.bin */; };
+		14A723852EEC1907008163C8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 14A723532EEC1907008163C8 /* README.md */; };
+		14A723862EEC1907008163C8 /* params_shard_16.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723452EEC1907008163C8 /* params_shard_16.bin */; };
+		14A723872EEC1907008163C8 /* params_shard_24.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A7234D2EEC1907008163C8 /* params_shard_24.bin */; };
+		14A723882EEC1907008163C8 /* params_shard_0.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723352EEC1907008163C8 /* params_shard_0.bin */; };
+		14A723892EEC1907008163C8 /* params_shard_15.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723442EEC1907008163C8 /* params_shard_15.bin */; };
+		14A7238A2EEC1907008163C8 /* params_shard_2.bin in Resources */ = {isa = PBXBuildFile; fileRef = 14A723372EEC1907008163C8 /* params_shard_2.bin */; };
+		14A7238B2EEC1907008163C8 /* tokenizer_config.json in Resources */ = {isa = PBXBuildFile; fileRef = 14A723562EEC1907008163C8 /* tokenizer_config.json */; };
 		14A807492EE8103000F0F28B /* whisper.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14A807452EE80D4800F0F28B /* whisper.xcframework */; };
 		14A8074E2EE8125100F0F28B /* LibWhisper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A8074D2EE8125100F0F28B /* LibWhisper.swift */; };
 		14A8074F2EE8125100F0F28B /* AudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A8074C2EE8125100F0F28B /* AudioConverter.swift */; };
@@ -39,10 +100,70 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		044F51F82EE991D300ADDE23 /* ggml-tiny.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-tiny.bin"; sourceTree = "<group>"; };
 		044F51FA2EE991D300ADDE23 /* jfk.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jfk.wav; sourceTree = "<group>"; };
+		1481909E2EEA538B0053B510 /* ggml-base.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "ggml-base.bin"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		14A722A72EEC00D3008163C8 /* libmlc_llm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmlc_llm.a; sourceTree = "<group>"; };
+		14A722A82EEC00D3008163C8 /* libmodel_iphone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmodel_iphone.a; sourceTree = "<group>"; };
+		14A722A92EEC00D3008163C8 /* libsentencepiece.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsentencepiece.a; sourceTree = "<group>"; };
+		14A722AA2EEC00D3008163C8 /* libtokenizers_c.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtokenizers_c.a; sourceTree = "<group>"; };
+		14A722AB2EEC00D3008163C8 /* libtokenizers_cpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtokenizers_cpp.a; sourceTree = "<group>"; };
+		14A722AC2EEC00D3008163C8 /* libtvm_ffi_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtvm_ffi_static.a; sourceTree = "<group>"; };
+		14A722AD2EEC00D3008163C8 /* libtvm_runtime.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtvm_runtime.a; sourceTree = "<group>"; };
+		14A7231E2EEC0FF0008163C8 /* MLCAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLCAppState.swift; sourceTree = "<group>"; };
+		14A7231F2EEC0FF0008163C8 /* MLCBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLCBridge.swift; sourceTree = "<group>"; };
+		14A723202EEC0FF0008163C8 /* MLCChatState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLCChatState.swift; sourceTree = "<group>"; };
+		14A723212EEC0FF0008163C8 /* MLCModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLCModels.swift; sourceTree = "<group>"; };
+		14A723272EEC1907008163C8 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		14A723282EEC1907008163C8 /* dbnavigator.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = dbnavigator.xml; sourceTree = "<group>"; };
+		14A723292EEC1907008163C8 /* markdown-navigator.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "markdown-navigator.xml"; sourceTree = "<group>"; };
+		14A7232A2EEC1907008163C8 /* markdown-navigator-enh.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "markdown-navigator-enh.xml"; sourceTree = "<group>"; };
+		14A7232B2EEC1907008163C8 /* misc.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = misc.xml; sourceTree = "<group>"; };
+		14A7232C2EEC1907008163C8 /* modules.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = modules.xml; sourceTree = "<group>"; };
+		14A7232D2EEC1907008163C8 /* Qwen2.5-1.5B-Instruct-q4f16_1-MLC.iml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Qwen2.5-1.5B-Instruct-q4f16_1-MLC.iml"; sourceTree = "<group>"; };
+		14A7232E2EEC1907008163C8 /* vcs.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = vcs.xml; sourceTree = "<group>"; };
+		14A7232F2EEC1907008163C8 /* workspace.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = workspace.xml; sourceTree = "<group>"; };
+		14A723312EEC1907008163C8 /* .gitattributes */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
+		14A723322EEC1907008163C8 /* merges.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = merges.txt; sourceTree = "<group>"; };
+		14A723332EEC1907008163C8 /* mlc-chat-config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "mlc-chat-config.json"; sourceTree = "<group>"; };
+		14A723342EEC1907008163C8 /* ndarray-cache.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "ndarray-cache.json"; sourceTree = "<group>"; };
+		14A723352EEC1907008163C8 /* params_shard_0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_0.bin; sourceTree = "<group>"; };
+		14A723362EEC1907008163C8 /* params_shard_1.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_1.bin; sourceTree = "<group>"; };
+		14A723372EEC1907008163C8 /* params_shard_2.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_2.bin; sourceTree = "<group>"; };
+		14A723382EEC1907008163C8 /* params_shard_3.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_3.bin; sourceTree = "<group>"; };
+		14A723392EEC1907008163C8 /* params_shard_4.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_4.bin; sourceTree = "<group>"; };
+		14A7233A2EEC1907008163C8 /* params_shard_5.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_5.bin; sourceTree = "<group>"; };
+		14A7233B2EEC1907008163C8 /* params_shard_6.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_6.bin; sourceTree = "<group>"; };
+		14A7233C2EEC1907008163C8 /* params_shard_7.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_7.bin; sourceTree = "<group>"; };
+		14A7233D2EEC1907008163C8 /* params_shard_8.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_8.bin; sourceTree = "<group>"; };
+		14A7233E2EEC1907008163C8 /* params_shard_9.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_9.bin; sourceTree = "<group>"; };
+		14A7233F2EEC1907008163C8 /* params_shard_10.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_10.bin; sourceTree = "<group>"; };
+		14A723402EEC1907008163C8 /* params_shard_11.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_11.bin; sourceTree = "<group>"; };
+		14A723412EEC1907008163C8 /* params_shard_12.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_12.bin; sourceTree = "<group>"; };
+		14A723422EEC1907008163C8 /* params_shard_13.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_13.bin; sourceTree = "<group>"; };
+		14A723432EEC1907008163C8 /* params_shard_14.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_14.bin; sourceTree = "<group>"; };
+		14A723442EEC1907008163C8 /* params_shard_15.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_15.bin; sourceTree = "<group>"; };
+		14A723452EEC1907008163C8 /* params_shard_16.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_16.bin; sourceTree = "<group>"; };
+		14A723462EEC1907008163C8 /* params_shard_17.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_17.bin; sourceTree = "<group>"; };
+		14A723472EEC1907008163C8 /* params_shard_18.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_18.bin; sourceTree = "<group>"; };
+		14A723482EEC1907008163C8 /* params_shard_19.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_19.bin; sourceTree = "<group>"; };
+		14A723492EEC1907008163C8 /* params_shard_20.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_20.bin; sourceTree = "<group>"; };
+		14A7234A2EEC1907008163C8 /* params_shard_21.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_21.bin; sourceTree = "<group>"; };
+		14A7234B2EEC1907008163C8 /* params_shard_22.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_22.bin; sourceTree = "<group>"; };
+		14A7234C2EEC1907008163C8 /* params_shard_23.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_23.bin; sourceTree = "<group>"; };
+		14A7234D2EEC1907008163C8 /* params_shard_24.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_24.bin; sourceTree = "<group>"; };
+		14A7234E2EEC1907008163C8 /* params_shard_25.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_25.bin; sourceTree = "<group>"; };
+		14A7234F2EEC1907008163C8 /* params_shard_26.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_26.bin; sourceTree = "<group>"; };
+		14A723502EEC1907008163C8 /* params_shard_27.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_27.bin; sourceTree = "<group>"; };
+		14A723512EEC1907008163C8 /* params_shard_28.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_28.bin; sourceTree = "<group>"; };
+		14A723522EEC1907008163C8 /* params_shard_29.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = params_shard_29.bin; sourceTree = "<group>"; };
+		14A723532EEC1907008163C8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		14A723542EEC1907008163C8 /* tensor-cache.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tensor-cache.json"; sourceTree = "<group>"; };
+		14A723552EEC1907008163C8 /* tokenizer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tokenizer.json; sourceTree = "<group>"; };
+		14A723562EEC1907008163C8 /* tokenizer_config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tokenizer_config.json; sourceTree = "<group>"; };
+		14A723572EEC1907008163C8 /* vocab.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = vocab.json; sourceTree = "<group>"; };
+		14A723592EEC1907008163C8 /* mlc-app-config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "mlc-app-config.json"; sourceTree = "<group>"; };
 		14A807452EE80D4800F0F28B /* whisper.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = whisper.xcframework; sourceTree = "<group>"; };
 		14A8074C2EE8125100F0F28B /* AudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConverter.swift; sourceTree = "<group>"; };
 		14A8074D2EE8125100F0F28B /* LibWhisper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibWhisper.swift; sourceTree = "<group>"; };
@@ -72,6 +193,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				14A807492EE8103000F0F28B /* whisper.xcframework in Frameworks */,
+				14A722AF2EEC00D3008163C8 /* libtvm_ffi_static.a in Frameworks */,
+				14A722B02EEC00D3008163C8 /* libtokenizers_cpp.a in Frameworks */,
+				14A7231D2EEC01D1008163C8 /* MLCSwift in Frameworks */,
+				14A722B12EEC00D3008163C8 /* libmodel_iphone.a in Frameworks */,
+				14A722B22EEC00D3008163C8 /* libsentencepiece.a in Frameworks */,
+				14A722B32EEC00D3008163C8 /* libtvm_runtime.a in Frameworks */,
+				14A722B42EEC00D3008163C8 /* libmlc_llm.a in Frameworks */,
+				14A722B52EEC00D3008163C8 /* libtokenizers_c.a in Frameworks */,
 				275AB67019205FDE5D3DCEF2 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,7 +211,7 @@
 		044F51F92EE991D300ADDE23 /* models */ = {
 			isa = PBXGroup;
 			children = (
-				044F51F82EE991D300ADDE23 /* ggml-tiny.bin */,
+				1481909E2EEA538B0053B510 /* ggml-base.bin */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -102,6 +231,105 @@
 				044F51FB2EE991D300ADDE23 /* samples */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		14A722AE2EEC00D3008163C8 /* MLCLibs */ = {
+			isa = PBXGroup;
+			children = (
+				14A722A72EEC00D3008163C8 /* libmlc_llm.a */,
+				14A722A82EEC00D3008163C8 /* libmodel_iphone.a */,
+				14A722A92EEC00D3008163C8 /* libsentencepiece.a */,
+				14A722AA2EEC00D3008163C8 /* libtokenizers_c.a */,
+				14A722AB2EEC00D3008163C8 /* libtokenizers_cpp.a */,
+				14A722AC2EEC00D3008163C8 /* libtvm_ffi_static.a */,
+				14A722AD2EEC00D3008163C8 /* libtvm_runtime.a */,
+			);
+			name = MLCLibs;
+			path = Frameworks/MLCLibs;
+			sourceTree = "<group>";
+		};
+		14A723222EEC0FF0008163C8 /* MLCBridge */ = {
+			isa = PBXGroup;
+			children = (
+				14A7231E2EEC0FF0008163C8 /* MLCAppState.swift */,
+				14A7231F2EEC0FF0008163C8 /* MLCBridge.swift */,
+				14A723202EEC0FF0008163C8 /* MLCChatState.swift */,
+				14A723212EEC0FF0008163C8 /* MLCModels.swift */,
+			);
+			name = MLCBridge;
+			path = Runner/MLCBridge;
+			sourceTree = "<group>";
+		};
+		14A723302EEC1907008163C8 /* .idea */ = {
+			isa = PBXGroup;
+			children = (
+				14A723272EEC1907008163C8 /* .gitignore */,
+				14A723282EEC1907008163C8 /* dbnavigator.xml */,
+				14A723292EEC1907008163C8 /* markdown-navigator.xml */,
+				14A7232A2EEC1907008163C8 /* markdown-navigator-enh.xml */,
+				14A7232B2EEC1907008163C8 /* misc.xml */,
+				14A7232C2EEC1907008163C8 /* modules.xml */,
+				14A7232D2EEC1907008163C8 /* Qwen2.5-1.5B-Instruct-q4f16_1-MLC.iml */,
+				14A7232E2EEC1907008163C8 /* vcs.xml */,
+				14A7232F2EEC1907008163C8 /* workspace.xml */,
+			);
+			path = .idea;
+			sourceTree = "<group>";
+		};
+		14A723582EEC1907008163C8 /* Qwen2.5-1.5B-Instruct-q4f16_1 */ = {
+			isa = PBXGroup;
+			children = (
+				14A723302EEC1907008163C8 /* .idea */,
+				14A723312EEC1907008163C8 /* .gitattributes */,
+				14A723322EEC1907008163C8 /* merges.txt */,
+				14A723332EEC1907008163C8 /* mlc-chat-config.json */,
+				14A723342EEC1907008163C8 /* ndarray-cache.json */,
+				14A723352EEC1907008163C8 /* params_shard_0.bin */,
+				14A723362EEC1907008163C8 /* params_shard_1.bin */,
+				14A723372EEC1907008163C8 /* params_shard_2.bin */,
+				14A723382EEC1907008163C8 /* params_shard_3.bin */,
+				14A723392EEC1907008163C8 /* params_shard_4.bin */,
+				14A7233A2EEC1907008163C8 /* params_shard_5.bin */,
+				14A7233B2EEC1907008163C8 /* params_shard_6.bin */,
+				14A7233C2EEC1907008163C8 /* params_shard_7.bin */,
+				14A7233D2EEC1907008163C8 /* params_shard_8.bin */,
+				14A7233E2EEC1907008163C8 /* params_shard_9.bin */,
+				14A7233F2EEC1907008163C8 /* params_shard_10.bin */,
+				14A723402EEC1907008163C8 /* params_shard_11.bin */,
+				14A723412EEC1907008163C8 /* params_shard_12.bin */,
+				14A723422EEC1907008163C8 /* params_shard_13.bin */,
+				14A723432EEC1907008163C8 /* params_shard_14.bin */,
+				14A723442EEC1907008163C8 /* params_shard_15.bin */,
+				14A723452EEC1907008163C8 /* params_shard_16.bin */,
+				14A723462EEC1907008163C8 /* params_shard_17.bin */,
+				14A723472EEC1907008163C8 /* params_shard_18.bin */,
+				14A723482EEC1907008163C8 /* params_shard_19.bin */,
+				14A723492EEC1907008163C8 /* params_shard_20.bin */,
+				14A7234A2EEC1907008163C8 /* params_shard_21.bin */,
+				14A7234B2EEC1907008163C8 /* params_shard_22.bin */,
+				14A7234C2EEC1907008163C8 /* params_shard_23.bin */,
+				14A7234D2EEC1907008163C8 /* params_shard_24.bin */,
+				14A7234E2EEC1907008163C8 /* params_shard_25.bin */,
+				14A7234F2EEC1907008163C8 /* params_shard_26.bin */,
+				14A723502EEC1907008163C8 /* params_shard_27.bin */,
+				14A723512EEC1907008163C8 /* params_shard_28.bin */,
+				14A723522EEC1907008163C8 /* params_shard_29.bin */,
+				14A723532EEC1907008163C8 /* README.md */,
+				14A723542EEC1907008163C8 /* tensor-cache.json */,
+				14A723552EEC1907008163C8 /* tokenizer.json */,
+				14A723562EEC1907008163C8 /* tokenizer_config.json */,
+				14A723572EEC1907008163C8 /* vocab.json */,
+			);
+			path = "Qwen2.5-1.5B-Instruct-q4f16_1";
+			sourceTree = "<group>";
+		};
+		14A7235A2EEC1907008163C8 /* bundle */ = {
+			isa = PBXGroup;
+			children = (
+				14A723582EEC1907008163C8 /* Qwen2.5-1.5B-Instruct-q4f16_1 */,
+				14A723592EEC1907008163C8 /* mlc-app-config.json */,
+			);
+			path = bundle;
 			sourceTree = "<group>";
 		};
 		2DD99F9BDF5A1742FF6360C5 /* Pods */ = {
@@ -137,6 +365,9 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				14A7235A2EEC1907008163C8 /* bundle */,
+				14A723222EEC0FF0008163C8 /* MLCBridge */,
+				14A722AE2EEC00D3008163C8 /* MLCLibs */,
 				044F51FC2EE991D300ADDE23 /* Resources */,
 				14A807502EE81F3D00F0F28B /* RiffWaveUtils.swift */,
 				14A8074C2EE8125100F0F28B /* AudioConverter.swift */,
@@ -224,6 +455,9 @@
 				Base,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
+			packageReferences = (
+				14A7231B2EEC01D1008163C8 /* XCLocalSwiftPackageReference "MLCSwift" */,
+			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -240,10 +474,59 @@
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				044F51FD2EE991D300ADDE23 /* jfk.wav in Resources */,
-				044F51FE2EE991D300ADDE23 /* ggml-tiny.bin in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				1481909F2EEA538B0053B510 /* ggml-base.bin in Resources */,
+				14A7235B2EEC1907008163C8 /* params_shard_10.bin in Resources */,
+				14A7235C2EEC1907008163C8 /* params_shard_14.bin in Resources */,
+				14A7235D2EEC1907008163C8 /* merges.txt in Resources */,
+				14A7235E2EEC1907008163C8 /* dbnavigator.xml in Resources */,
+				14A7235F2EEC1907008163C8 /* workspace.xml in Resources */,
+				14A723602EEC1907008163C8 /* params_shard_9.bin in Resources */,
+				14A723612EEC1907008163C8 /* .gitattributes in Resources */,
+				14A723622EEC1907008163C8 /* vocab.json in Resources */,
+				14A723632EEC1907008163C8 /* params_shard_1.bin in Resources */,
+				14A723642EEC1907008163C8 /* params_shard_18.bin in Resources */,
+				14A723652EEC1907008163C8 /* modules.xml in Resources */,
+				14A723662EEC1907008163C8 /* params_shard_26.bin in Resources */,
+				14A723672EEC1907008163C8 /* params_shard_25.bin in Resources */,
+				14A723682EEC1907008163C8 /* misc.xml in Resources */,
+				14A723692EEC1907008163C8 /* mlc-app-config.json in Resources */,
+				14A7236A2EEC1907008163C8 /* params_shard_29.bin in Resources */,
+				14A7236B2EEC1907008163C8 /* params_shard_27.bin in Resources */,
+				14A7236C2EEC1907008163C8 /* params_shard_13.bin in Resources */,
+				14A7236D2EEC1907008163C8 /* params_shard_11.bin in Resources */,
+				14A7236E2EEC1907008163C8 /* params_shard_23.bin in Resources */,
+				14A7236F2EEC1907008163C8 /* params_shard_22.bin in Resources */,
+				14A723702EEC1907008163C8 /* params_shard_28.bin in Resources */,
+				14A723712EEC1907008163C8 /* markdown-navigator.xml in Resources */,
+				14A723722EEC1907008163C8 /* params_shard_17.bin in Resources */,
+				14A723732EEC1907008163C8 /* ndarray-cache.json in Resources */,
+				14A723742EEC1907008163C8 /* params_shard_5.bin in Resources */,
+				14A723752EEC1907008163C8 /* markdown-navigator-enh.xml in Resources */,
+				14A723762EEC1907008163C8 /* params_shard_8.bin in Resources */,
+				14A723772EEC1907008163C8 /* params_shard_20.bin in Resources */,
+				14A723782EEC1907008163C8 /* mlc-chat-config.json in Resources */,
+				14A723792EEC1907008163C8 /* params_shard_4.bin in Resources */,
+				14A7237A2EEC1907008163C8 /* params_shard_21.bin in Resources */,
+				14A7237B2EEC1907008163C8 /* params_shard_6.bin in Resources */,
+				14A7237C2EEC1907008163C8 /* .gitignore in Resources */,
+				14A7237D2EEC1907008163C8 /* tokenizer.json in Resources */,
+				14A7237E2EEC1907008163C8 /* tensor-cache.json in Resources */,
+				14A7237F2EEC1907008163C8 /* Qwen2.5-1.5B-Instruct-q4f16_1-MLC.iml in Resources */,
+				14A723802EEC1907008163C8 /* params_shard_7.bin in Resources */,
+				14A723812EEC1907008163C8 /* params_shard_12.bin in Resources */,
+				14A723822EEC1907008163C8 /* vcs.xml in Resources */,
+				14A723832EEC1907008163C8 /* params_shard_19.bin in Resources */,
+				14A723842EEC1907008163C8 /* params_shard_3.bin in Resources */,
+				14A723852EEC1907008163C8 /* README.md in Resources */,
+				14A723862EEC1907008163C8 /* params_shard_16.bin in Resources */,
+				14A723872EEC1907008163C8 /* params_shard_24.bin in Resources */,
+				14A723882EEC1907008163C8 /* params_shard_0.bin in Resources */,
+				14A723892EEC1907008163C8 /* params_shard_15.bin in Resources */,
+				14A7238A2EEC1907008163C8 /* params_shard_2.bin in Resources */,
+				14A7238B2EEC1907008163C8 /* tokenizer_config.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,9 +541,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -313,9 +600,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -348,6 +639,10 @@
 				14A8074E2EE8125100F0F28B /* LibWhisper.swift in Sources */,
 				14A8074F2EE8125100F0F28B /* AudioConverter.swift in Sources */,
 				74858FB11ED2DC5700515811 /* AudioExtractor.swift in Sources */,
+				14A723232EEC0FF0008163C8 /* MLCBridge.swift in Sources */,
+				14A723242EEC0FF0008163C8 /* MLCAppState.swift in Sources */,
+				14A723252EEC0FF0008163C8 /* MLCChatState.swift in Sources */,
+				14A723262EEC0FF0008163C8 /* MLCModels.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 				14A807512EE81F3D00F0F28B /* RiffWaveUtils.swift in Sources */,
 			);
@@ -437,6 +732,21 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks/MLCLibs",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl,-all_load",
+					"-lmodel_iphone",
+					"-lmlc_llm",
+					"-ltvm_ffi_static",
+					"-ltvm_runtime",
+					"-ltokenizers_cpp",
+					"-lsentencepiece",
+					"-ltokenizers_c",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lingogo.lingoFlutter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -567,6 +877,21 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks/MLCLibs",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl,-all_load",
+					"-lmodel_iphone",
+					"-lmlc_llm",
+					"-ltvm_ffi_static",
+					"-ltvm_runtime",
+					"-ltokenizers_cpp",
+					"-lsentencepiece",
+					"-ltokenizers_c",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.xianbei.lingogo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -589,6 +914,21 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks/MLCLibs",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl,-all_load",
+					"-lmodel_iphone",
+					"-lmlc_llm",
+					"-ltvm_ffi_static",
+					"-ltvm_runtime",
+					"-ltokenizers_cpp",
+					"-lsentencepiece",
+					"-ltokenizers_c",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.xianbei.lingogo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -622,6 +962,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		14A7231B2EEC01D1008163C8 /* XCLocalSwiftPackageReference "MLCSwift" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = MLCSwift;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		14A7231C2EEC01D1008163C8 /* MLCSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MLCSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
 }

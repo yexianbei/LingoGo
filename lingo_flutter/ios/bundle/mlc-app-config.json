@@ -1,0 +1,10 @@
+{
+  "model_list": [
+    {
+      "model_id": "Qwen2.5-1.5B-Instruct-q4f16_1",
+      "model_lib": "qwen2_q4f16_1_e4d99756b3099210399a81da2c6bad86",
+      "model_path": "Qwen2.5-1.5B-Instruct-q4f16_1",
+      "estimated_vram_bytes": 2000000000
+    }
+  ]
+}

@@ -41,6 +41,7 @@ class _DebugPageState extends State<DebugPage> {
   
   int _progress = 0;
   bool _isTranscribing = false;
+  bool _enableSmartMerge = true;
   StreamSubscription? _progressSubscription;
   String? _currentThumbnailPath; // Add this
 
@@ -380,7 +381,12 @@ class _DebugPageState extends State<DebugPage> {
           
           try {
              final List<dynamic> jsonList = jsonDecode(transcription);
-             final segments = jsonList.map((e) => SubtitleSegment.fromJson(e)).toList();
+             List<SubtitleSegment> segments = jsonList.map((e) => SubtitleSegment.fromJson(e)).toList();
+             
+             if (_enableSmartMerge) {
+               segments = _optimizeSegments(segments);
+               _addLog('Smart merge optimized ${jsonList.length} -> ${segments.length} segments');
+             }
              
              setState(() {
                _segments = segments;
@@ -428,6 +434,46 @@ class _DebugPageState extends State<DebugPage> {
         });
       }
     }
+  }
+
+  List<SubtitleSegment> _optimizeSegments(List<SubtitleSegment> original) {
+    if (original.isEmpty) return [];
+    
+    final List<SubtitleSegment> merged = [];
+    SubtitleSegment? pending;
+
+    for (final segment in original) {
+      if (pending == null) {
+        pending = segment;
+      } else {
+        // If pending segment doesn't end with sentence-ending punctuation, merge
+        final trimmedText = pending.text.trim();
+        final bool isSentenceEnd = trimmedText.endsWith('.') || 
+                                   trimmedText.endsWith('?') || 
+                                   trimmedText.endsWith('!') ||
+                                   trimmedText.endsWith('。') || 
+                                   trimmedText.endsWith('？') || 
+                                   trimmedText.endsWith('！');
+        
+        if (!isSentenceEnd) {
+           // Merge
+           pending = pending.copyWith(
+             end: segment.end,
+             text: "${pending.text} ${segment.text}",
+           );
+        } else {
+           // Push pending and start new
+           merged.add(pending);
+           pending = segment;
+        }
+      }
+    }
+    
+    if (pending != null) {
+      merged.add(pending);
+    }
+    
+    return merged;
   }
   
   /// 查找 Whisper 模型文件路径
@@ -505,6 +551,23 @@ class _DebugPageState extends State<DebugPage> {
               onTap: _isTranscribing ? null : () {
                 Navigator.pop(context);
                 _transcribeAudio();
+              },
+            ),
+            SwitchListTile(
+              title: const Text('Smart Merge Segments'),
+              subtitle: const Text('Auto-merge broken sentences'),
+              value: _enableSmartMerge,
+              onChanged: (val) {
+                // If we have segments, maybe re-process them? 
+                // For now just update state for next transcription
+                setState(() {
+                  _enableSmartMerge = val;
+                });
+                Navigator.pop(context);
+                _showSettings(); // Re-open to show updated state? Or just stay closed.
+                // Or better: update state inside builder if using StatefulBuilder?
+                // Since showSettings is simple, let's just close and let user re-open or optimize on fly?
+                // Let's just update the var.
               },
             ),
             ListTile(
@@ -702,24 +765,28 @@ class _DebugPageState extends State<DebugPage> {
             const SizedBox(height: 16),
 
             // 3. Controller Panel
-            VideoControllerPanel(
-              isPlaying: _isPlaying,
-              currentPosition: Duration(milliseconds: _currentPosition),
-              totalDuration: Duration(milliseconds: _totalDuration > 0 ? _totalDuration : (_segments.isNotEmpty ? _segments.last.end : 0)), 
-              onPlayPause: () {
-                if (_videoController != null) {
-                  if (_isPlaying) {
-                    _videoController!.pause();
-                  } else {
-                    _videoController!.play();
+            // 3. Controller Panel
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: VideoControllerPanel(
+                isPlaying: _isPlaying,
+                currentPosition: Duration(milliseconds: _currentPosition),
+                totalDuration: Duration(milliseconds: _totalDuration > 0 ? _totalDuration : (_segments.isNotEmpty ? _segments.last.end : 0)), 
+                onPlayPause: () {
+                  if (_videoController != null) {
+                    if (_isPlaying) {
+                      _videoController!.pause();
+                    } else {
+                      _videoController!.play();
+                    }
                   }
-                }
-              },
-              onSeek: (val) {
-                if (_videoController != null) {
-                  _videoController!.seekTo(Duration(milliseconds: val.toInt()));
-                }
-              },
+                },
+                onSeek: (val) {
+                  if (_videoController != null) {
+                    _videoController!.seekTo(Duration(milliseconds: val.toInt()));
+                  }
+                },
+              ),
             ),
           ],
         ),
